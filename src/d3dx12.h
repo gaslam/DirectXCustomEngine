@@ -9,6 +9,7 @@
 #define __D3DX12_H__
 
 #include "d3d12.h"
+#include "utils.h"
 
 #if defined( __cplusplus )
 
@@ -18,8 +19,8 @@ extern const DECLSPEC_SELECTANY CD3DX12_DEFAULT D3D12_DEFAULT;
 //------------------------------------------------------------------------------------------------
 inline bool operator==( const D3D12_VIEWPORT& l, const D3D12_VIEWPORT& r ) noexcept
 {
-    return l.TopLeftX == r.TopLeftX && l.TopLeftY == r.TopLeftY && l.Width == r.Width &&
-        l.Height == r.Height && l.MinDepth == r.MinDepth && l.MaxDepth == r.MaxDepth;
+    return MathUtils::IsEqual(l.TopLeftX, r.TopLeftX) && MathUtils::IsEqual(l.TopLeftY,r.TopLeftY) && MathUtils::IsEqual(l.Width,r.Width) &&
+        MathUtils::IsEqual(l.Height, r.Height) && MathUtils::IsEqual(l.MinDepth, r.MinDepth) && MathUtils::IsEqual(l.MaxDepth, r.MaxDepth);
 }
 
 //------------------------------------------------------------------------------------------------
@@ -39,10 +40,10 @@ struct CD3DX12_RECT : public D3D12_RECT
         LONG Right,
         LONG Bottom ) noexcept
     {
-        left = Left;
-        top = Top;
-        right = Right;
-        bottom = Bottom;
+       left = Left;
+       top = Top;
+       right = Right;
+       bottom = Bottom;
     }
 };
 
@@ -76,29 +77,29 @@ struct CD3DX12_VIEWPORT : public D3D12_VIEWPORT
         FLOAT minDepth = D3D12_MIN_DEPTH,
         FLOAT maxDepth = D3D12_MAX_DEPTH ) noexcept
     {
-        const auto Desc = pResource->GetDesc();
-        const UINT64 SubresourceWidth = Desc.Width >> mipSlice;
-        const UINT64 SubresourceHeight = Desc.Height >> mipSlice;
+        const auto Desc{ pResource->GetDesc() };
+        const UINT64 SubresourceWidth { Desc.Width >> mipSlice};
+        const UINT64 SubresourceHeight{ Desc.Height >> mipSlice };
         switch (Desc.Dimension)
         {
         case D3D12_RESOURCE_DIMENSION_BUFFER:
             TopLeftX = topLeftX;
             TopLeftY = 0.0f;
-            Width = float(Desc.Width) - topLeftX;
+            Width = static_cast<float>(Desc.Width) - topLeftX;
             Height = 1.0f;
             break;
         case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
-            TopLeftX = topLeftX;
+        	TopLeftX = topLeftX;
             TopLeftY = 0.0f;
-            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.0f) - topLeftX;
+            Width = (SubresourceWidth ? static_cast<float>(SubresourceWidth) : 1.0f) - topLeftX;
             Height = 1.0f;
             break;
         case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
         case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
             TopLeftX = topLeftX;
             TopLeftY = topLeftY;
-            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.0f) - topLeftX;
-            Height = (SubresourceHeight ? float(SubresourceHeight) : 1.0f) - topLeftY;
+            Width = (SubresourceWidth ? static_cast<float>(SubresourceWidth) : 1.0f) - topLeftX;
+            Height = (SubresourceHeight ? static_cast<float>(SubresourceHeight) : 1.0f) - topLeftY;
             break;
         default: break;
         }

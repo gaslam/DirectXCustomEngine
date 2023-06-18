@@ -35,7 +35,7 @@ namespace
     std::unique_ptr<Game> g_game;
 }
 
-LPCWSTR g_szAppName = L"DirectX12CustomEngine";
+LPCWSTR g_szAppName{ L"DirectX12CustomEngine" };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
@@ -80,13 +80,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         int w, h;
         g_game->GetDefaultSize(w, h);
 
-        RECT rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
+        RECT rc  { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
 
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-        HWND hwnd = CreateWindowExW(0, L"DirectX12CustomEngineWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
+        HWND hwnd{ CreateWindowExW(0, L"DirectX12CustomEngineWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
-            nullptr);
+            nullptr) };
         // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"DirectX12CustomEngineWindowClass", g_szAppName, WS_POPUP,
         // to default to fullscreen.
 
@@ -104,7 +104,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
     // Main message loop
-    MSG msg = {};
+    MSG msg  {};
     while (WM_QUIT != msg.message)
     {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -126,13 +126,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 // Windows procedure
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static bool s_in_sizemove = false;
-    static bool s_in_suspend = false;
-    static bool s_minimized = false;
-    static bool s_fullscreen = false;
+    static bool s_in_sizemove{ false };
+    static bool s_in_suspend { false};
+    static bool s_minimized { false};
+    static bool s_fullscreen { false};
     // TODO: Set s_fullscreen to true if defaulting to fullscreen.
 
-    auto game = reinterpret_cast<Game*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    const auto game{ reinterpret_cast<Game*>(GetWindowLongPtr(hWnd, GWLP_USERDATA)) };
 
     switch (message)
     {
@@ -205,7 +205,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_GETMINMAXINFO:
         if (lParam)
         {
-            auto info = reinterpret_cast<MINMAXINFO*>(lParam);
+            const auto info{ reinterpret_cast<MINMAXINFO*>(lParam) };
             info->ptMinTrackSize.x = 320;
             info->ptMinTrackSize.y = 200;
         }
@@ -258,8 +258,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                int width = 800;
-                int height = 600;
+                int width{ 800 };
+                int height{ 600 };
                 if (game)
                     game->GetDefaultSize(width, height);
 
