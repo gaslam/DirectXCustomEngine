@@ -5,7 +5,7 @@
 #pragma once
 
 #include "DeviceResources.h"
-#include "StepTimer.h"
+#include "../Utils/StepTimer.h"
 
 
 // A basic game implementation that creates a D3D12 device and

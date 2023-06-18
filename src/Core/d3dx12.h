@@ -9,7 +9,7 @@
 #define __D3DX12_H__
 
 #include "d3d12.h"
-#include "utils.h"
+#include "../Utils/Utils.h"
 
 #if defined( __cplusplus )
 
