@@ -38,8 +38,8 @@ public:
     void OnDeactivated();
     void OnSuspending();
     void OnResuming();
-    void OnWindowMoved();
-    void OnDisplayChange();
+    void OnWindowMoved() const;
+    void OnDisplayChange() const;
     void OnWindowSizeChanged(int width, int height);
 
     // Properties
@@ -48,19 +48,19 @@ public:
 private:
 
     void Update(DX::StepTimer const& timer);
-    void Render();
+    void Render() const;
 
-    void Clear();
+    void Clear() const;
 
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
 
     // Device resources.
-    std::unique_ptr<DX::DeviceResources>        m_deviceResources;
+    std::unique_ptr<DX::DeviceResources>        m_deviceResources{};
 
     // Rendering loop timer.
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    std::unique_ptr<DirectX::GraphicsMemory> m_pGraphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_pGraphicsMemory{};
 };

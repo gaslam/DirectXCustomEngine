@@ -64,10 +64,9 @@ void Game::Update(DX::StepTimer const& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
-    float elapsedTime = float(timer.GetElapsedSeconds());
+    float elapsedTime{ static_cast<float>(timer.GetElapsedSeconds()) };
 
     // TODO: Add your game logic here.
-    elapsedTime;
 
     PIXEndEvent();
 }
@@ -75,7 +74,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 #pragma region Frame Render
 // Draws the scene.
-void Game::Render()
+void Game::Render() const
 {
     // Don't try to render anything before the first Update.
     if (m_timer.GetFrameCount() == 0)
@@ -87,7 +86,7 @@ void Game::Render()
     m_deviceResources->Prepare();
     Clear();
 
-    auto commandList = m_deviceResources->GetCommandList();
+    const auto commandList{ m_deviceResources->GetCommandList() };
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
     // TODO: Add your rendering code here.
@@ -105,22 +104,22 @@ void Game::Render()
 }
 
 // Helper method to clear the back buffers.
-void Game::Clear()
+void Game::Clear() const
 {
-    auto commandList = m_deviceResources->GetCommandList();
+    const auto commandList{ m_deviceResources->GetCommandList() };
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Clear");
 
     // Clear the views.
-    auto const rtvDescriptor = m_deviceResources->GetRenderTargetView();
-    auto const dsvDescriptor = m_deviceResources->GetDepthStencilView();
+    auto const rtvDescriptor { m_deviceResources->GetRenderTargetView()};
+    auto const dsvDescriptor{ m_deviceResources->GetDepthStencilView() };
 
     commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
     commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
     commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
     // Set the viewport and scissor rect.
-    auto const viewport = m_deviceResources->GetScreenViewport();
-    auto const scissorRect = m_deviceResources->GetScissorRect();
+    auto const viewport { m_deviceResources->GetScreenViewport()};
+    auto const scissorRect { m_deviceResources->GetScissorRect()};
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
 
@@ -152,13 +151,13 @@ void Game::OnResuming()
     // TODO: Game is being power-resumed (or returning from minimize).
 }
 
-void Game::OnWindowMoved()
+void Game::OnWindowMoved() const
 {
-    auto const r = m_deviceResources->GetOutputSize();
+    auto const r{ m_deviceResources->GetOutputSize() };
     m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
-void Game::OnDisplayChange()
+void Game::OnDisplayChange() const
 {
     m_deviceResources->UpdateColorSpace();
 }
@@ -186,7 +185,7 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 // These are the resources that depend on the device.
 void Game::CreateDeviceDependentResources()
 {
-    auto device = m_deviceResources->GetD3DDevice();
+    auto device{ m_deviceResources->GetD3DDevice() };
 
     // Check Shader Model 6 support
     D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_0 };
