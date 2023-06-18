@@ -5,6 +5,13 @@
 #include "pch.h"
 #include "Game.h"
 
+#if _DEBUG
+// ReSharper disable once CppUnusedIncludeDirective
+#if __has_include(<vld.h>)
+#include <vld.h>
+#endif
+#endif
+
 using namespace DirectX;
 
 #ifdef __clang__
