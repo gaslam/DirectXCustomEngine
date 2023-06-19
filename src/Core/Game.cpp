@@ -5,6 +5,9 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "Components/TestComponent.h"
+#include "Misc/GameObject.h"
+
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
@@ -46,6 +49,12 @@ void Game::Initialize(HWND window, int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
     OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
+
+    const auto pGameObject{ std::make_unique<Engine::GameObject>() };
+   if( !pGameObject->AddComponent<Engine::TestComponent>())
+   {
+       OutputDebugStringA("ERROR: Component not added!\n");
+   }
 }
 
 #pragma region Frame Update

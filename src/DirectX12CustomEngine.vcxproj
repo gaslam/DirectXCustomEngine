@@ -202,9 +202,12 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core\d3dx12.h" />
+    <ClInclude Include="Components\BaseComponent.h" />
+    <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\Game.h" />
-    <ClInclude Include="Core\pch.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Misc\GameObject.h" />
+    <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="Utils\StepTimer.h" />
     <ClInclude Include="Core\DeviceResources.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -213,12 +216,13 @@
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\Main.cpp" />
     <ClCompile Include="Core\DeviceResources.cpp" />
-    <ClCompile Include="Core\pch.cpp">
+    <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Components\TestComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
