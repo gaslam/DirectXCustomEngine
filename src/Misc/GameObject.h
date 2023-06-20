@@ -14,7 +14,7 @@ namespace Engine
 		std::enable_if_t<std::is_base_of_v<BaseComponent, T>, bool> IsComponentAdded()
 		{
 			const std::type_index typeIndex { std::type_index(typeid(T))};
-			return m_pComponents.find(typeIndex) != m_pComponents.end();
+			return m_pComponents.contains(typeIndex);
 		}
 
 		template <typename  T>
@@ -75,9 +75,9 @@ namespace Engine
 
 		void Update(float elapsedTime) const
 		{
-			for(const auto& pComponent: m_pComponents)
+			for(const auto& val : m_pComponents | std::views::values)
 			{
-				pComponent.second->Update(elapsedTime);
+				val->Update(elapsedTime);
 			}
 			for(const auto& pChild: m_pChildren)
 			{
@@ -87,9 +87,9 @@ namespace Engine
 
 		void Draw() const
 		{
-			for(const auto& pComponent: m_pComponents)
+			for(const auto& val : m_pComponents | std::views::values)
 			{
-				pComponent.second->Draw();
+				val->Draw();
 			}
 			for(const auto& pChild: m_pChildren)
 			{
@@ -99,9 +99,9 @@ namespace Engine
 
 		void PostDraw() const
 		{
-			for (const auto& pComponent : m_pComponents)
+			for (const auto& val : m_pComponents | std::views::values)
 			{
-				pComponent.second->PostDraw();
+				val->PostDraw();
 			}
 			for (const auto& pChild : m_pChildren)
 			{
