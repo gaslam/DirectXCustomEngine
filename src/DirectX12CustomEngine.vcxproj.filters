@@ -10,6 +10,7 @@
     <ClInclude Include="Misc\GameObject.h" />
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="Components\TestComponent.h" />
+    <ClInclude Include="Misc\Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
