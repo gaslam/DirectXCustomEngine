@@ -211,6 +211,7 @@
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Misc\Singleton.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="SceneClasses\Scene.h" />
     <ClInclude Include="SceneClasses\GameObject.h" />
     <ClInclude Include="Components\TestComponent.h" />
@@ -233,6 +234,7 @@
     </ClCompile>
     <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="Managers\SceneManager.cpp" />
+    <ClCompile Include="Core\Renderer.cpp" />
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="SceneClasses\TestScene.cpp" />
   </ItemGroup>

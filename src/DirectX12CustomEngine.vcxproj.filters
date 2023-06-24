@@ -15,6 +15,7 @@
     <ClInclude Include="SceneClasses\Scene.h" />
     <ClInclude Include="SceneUtils.h" />
     <ClInclude Include="SceneClasses\TestScene.h" />
+    <ClInclude Include="Core\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -25,6 +26,7 @@
     <ClCompile Include="Managers\SceneManager.cpp" />
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="SceneClasses\TestScene.cpp" />
+    <ClCompile Include="Core\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

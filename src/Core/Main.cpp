@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "Renderer.h"
 
 #if _DEBUG
 // ReSharper disable once CppUnusedIncludeDirective
@@ -150,16 +151,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_DISPLAYCHANGE:
-        if (game)
+        if (const auto pRenderer{ game ? game->GetRenderer() : nullptr })
         {
-            game->OnDisplayChange();
+            pRenderer->OnDisplayChange();
         }
         break;
 
     case WM_MOVE:
-        if (game)
+        if (const auto pRenderer{ game ? game->GetRenderer() : nullptr })
         {
-            game->OnWindowMoved();
+            pRenderer->OnWindowMoved();
         }
         break;
 
@@ -181,9 +182,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 game->OnResuming();
             s_in_suspend = false;
         }
-        else if (!s_in_sizemove && game)
+        else if (!s_in_sizemove)
         {
-            game->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+            if(const auto pRenderer{ game ? game->GetRenderer() : nullptr })
+            {
+                pRenderer->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+            }
         }
         break;
 
@@ -193,12 +197,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_EXITSIZEMOVE:
         s_in_sizemove = false;
-        if (game)
+        if (const auto pRenderer{ game ? game->GetRenderer() : nullptr })
         {
             RECT rc;
             GetClientRect(hWnd, &rc);
 
-            game->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+            pRenderer->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
         }
         break;
 
