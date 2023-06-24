@@ -5,6 +5,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "Managers/SceneManager.h"
 
 #if _DEBUG
 // ReSharper disable once CppUnusedIncludeDirective
@@ -120,6 +121,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
     g_game.reset();
+    const auto pSceneManager{ Engine::SceneManager::GetInstance() };
+    pSceneManager->Destroy();
 
     return static_cast<int>(msg.wParam);
 }
