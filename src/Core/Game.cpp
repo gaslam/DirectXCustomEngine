@@ -6,7 +6,9 @@
 #include "Game.h"
 
 #include "Components/TestComponent.h"
-#include "Misc/GameObject.h"
+#include "SceneClasses/GameObject.h"
+#include "Managers/SceneManager.h"
+#include "SceneUtils.h"
 
 extern void ExitGame() noexcept;
 
@@ -14,7 +16,7 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
-Game::Game() noexcept(false)
+Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstance() }
 {
     m_deviceResources = std::make_unique<DX::DeviceResources>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
@@ -55,6 +57,10 @@ void Game::Initialize(HWND window, int width, int height)
    {
        OutputDebugStringA("ERROR: Component not added!\n");
    }
+
+   m_pGamePad = std::make_unique<GamePad>();
+
+   SceneUtils::LoadScenes();
 }
 
 #pragma region Frame Update
@@ -70,15 +76,22 @@ void Game::Tick()
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& /*timer*/)
+void Game::Update(DX::StepTimer const& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
-    //float elapsedTime{ static_cast<float>(timer.GetElapsedSeconds()) };
+    const float elapsedTime{ static_cast<float>(timer.GetElapsedSeconds()) };
 
     // TODO: Add your game logic here.
+    m_pSceneManager->Update(elapsedTime);
 
     PIXEndEvent();
+
+    const auto pad{ m_pGamePad->GetState(0) };
+    if(pad.IsConnected() && pad.IsViewPressed())
+    {
+        ExitGame();
+    }
 }
 #pragma endregion
 
@@ -100,6 +113,8 @@ void Game::Render() const
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
     // TODO: Add your rendering code here.
+
+    m_pSceneManager->Render();
 
     PIXEndEvent(commandList);
 
@@ -147,11 +162,19 @@ void Game::OnActivated()
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+    if(m_pGamePad)
+    {
+        m_pGamePad->Suspend();
+    }
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+    if(m_pGamePad)
+    {
+        m_pGamePad->Resume();
+    }
 }
 
 void Game::OnResuming()

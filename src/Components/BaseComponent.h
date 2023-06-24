@@ -16,9 +16,9 @@ namespace Engine
 		virtual void Initialize() = 0;
 		virtual void PostInitialize() {}
 		virtual void Update(float /*elapsedTime*/) {}
-		virtual void Draw() {}
-		virtual void ShadowMapDraw() {}
-		virtual void PostDraw() {}
+		virtual void Render() {}
+		virtual void ShadowMapRender() {}
+		virtual void PostRender() {}
 		virtual void OnOwnerAttach(GameObject* /*pOwner*/) {}
 		virtual void OnOwnerDetach(GameObject* /*pObject*/) {}
 		virtual void OnSceneAttach() {}

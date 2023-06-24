@@ -211,8 +211,12 @@
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Misc\Singleton.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Misc\GameObject.h" />
+    <ClInclude Include="SceneClasses\Scene.h" />
+    <ClInclude Include="SceneClasses\GameObject.h" />
     <ClInclude Include="Components\TestComponent.h" />
+    <ClInclude Include="Managers\SceneManager.h" />
+    <ClInclude Include="SceneUtils.h" />
+    <ClInclude Include="SceneClasses\TestScene.h" />
     <ClInclude Include="Utils\StepTimer.h" />
     <ClInclude Include="Core\DeviceResources.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -228,6 +232,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Components\TestComponent.cpp" />
+    <ClCompile Include="Managers\SceneManager.cpp" />
+    <ClCompile Include="SceneClasses\Scene.cpp" />
+    <ClCompile Include="SceneClasses\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

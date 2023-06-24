@@ -85,27 +85,27 @@ namespace Engine
 			}
 		}
 
-		void Draw() const
+		void Render() const
 		{
 			for(const auto& val : m_pComponents | std::views::values)
 			{
-				val->Draw();
+				val->Render();
 			}
 			for(const auto& pChild: m_pChildren)
 			{
-				pChild->Draw();
+				pChild->Render();
 			}
 		}
 
-		void PostDraw() const
+		void PostRender() const
 		{
 			for (const auto& val : m_pComponents | std::views::values)
 			{
-				val->PostDraw();
+				val->PostRender();
 			}
 			for (const auto& pChild : m_pChildren)
 			{
-				pChild->PostDraw();
+				pChild->PostRender();
 			}
 		}
 

@@ -10,6 +10,11 @@
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
+
+namespace Engine
+{
+    class SceneManager;
+}
 class Game final : public DX::IDeviceNotify
 {
 public:
@@ -63,4 +68,8 @@ private:
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
     std::unique_ptr<DirectX::GraphicsMemory> m_pGraphicsMemory{};
+
+    std::unique_ptr<DirectX::GamePad> m_pGamePad{};
+
+    Engine::SceneManager* m_pSceneManager{};
 };

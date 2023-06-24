@@ -7,10 +7,14 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\DeviceResources.h" />
     <ClInclude Include="Utils\StepTimer.h" />
-    <ClInclude Include="Misc\GameObject.h" />
+    <ClInclude Include="SceneClasses\GameObject.h" />
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="Misc\Singleton.h" />
+    <ClInclude Include="Managers\SceneManager.h" />
+    <ClInclude Include="SceneClasses\Scene.h" />
+    <ClInclude Include="SceneUtils.h" />
+    <ClInclude Include="SceneClasses\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -18,6 +22,9 @@
     <ClCompile Include="Core\Main.cpp" />
     <ClCompile Include="Core\DeviceResources.cpp" />
     <ClCompile Include="Components\TestComponent.cpp" />
+    <ClCompile Include="Managers\SceneManager.cpp" />
+    <ClCompile Include="SceneClasses\Scene.cpp" />
+    <ClCompile Include="SceneClasses\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
