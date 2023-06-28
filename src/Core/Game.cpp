@@ -36,9 +36,6 @@ void Game::Initialize(HWND window, int width, int height)
 
    SceneUtils::LoadScenes();
    Logger::GetInstance()->Initialize();
-   Logger::GetInstance()->LogWarning(L"Test");
-   Logger::GetInstance()->LogError(L"Test");
-   Logger::GetInstance()->LogInfo(L"Test");
 }
 
 #pragma region Frame Update
