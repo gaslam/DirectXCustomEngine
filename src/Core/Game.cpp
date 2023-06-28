@@ -5,6 +5,7 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "Logger.h"
 #include "Renderer.h"
 #include "Components/TestComponent.h"
 #include "SceneClasses/GameObject.h"
@@ -34,6 +35,10 @@ void Game::Initialize(HWND window, int width, int height)
    m_pGamePad = std::make_unique<GamePad>();
 
    SceneUtils::LoadScenes();
+   Logger::GetInstance()->Initialize();
+   Logger::GetInstance()->LogWarning(L"Test");
+   Logger::GetInstance()->LogError(L"Test");
+   Logger::GetInstance()->LogInfo(L"Test");
 }
 
 #pragma region Frame Update

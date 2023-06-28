@@ -16,6 +16,7 @@
     <ClInclude Include="SceneUtils.h" />
     <ClInclude Include="SceneClasses\TestScene.h" />
     <ClInclude Include="Core\Renderer.h" />
+    <ClInclude Include="Logger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="SceneClasses\TestScene.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
+    <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

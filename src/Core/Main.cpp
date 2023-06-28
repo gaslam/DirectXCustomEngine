@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "Logger.h"
 #include "Renderer.h"
 #include "Managers/SceneManager.h"
 
@@ -122,7 +123,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     g_game.reset();
     const auto pSceneManager{ Engine::SceneManager::GetInstance() };
+    const auto pLogger{ Logger::GetInstance() };
     pSceneManager->Destroy();
+    pLogger->Destroy();
 
     return static_cast<int>(msg.wParam);
 }
