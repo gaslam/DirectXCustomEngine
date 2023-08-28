@@ -38,7 +38,7 @@ namespace Engine
 			}
 			const std::type_index typeIndex { std::type_index(typeid(T))};
 			auto pComponent{ std::make_unique<T>(std::forward<Args>(args)...) };
-			pComponent->SetOwner(this);
+			pComponent->SetOwner(nullptr);
 			pComponent->Initialize();
 			pComponent->OnOwnerAttach(this);
 			auto pointer{ pComponent.get()};

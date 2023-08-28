@@ -17,6 +17,7 @@
     <ClInclude Include="SceneClasses\TestScene.h" />
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Components\CameraComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="SceneClasses\TestScene.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Components\CameraComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

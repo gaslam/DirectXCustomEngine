@@ -26,16 +26,18 @@ Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstanc
 void Game::Initialize(HWND window, int width, int height)
 {
     m_pRenderer->Initialize(window, width, height);
+    const auto pLogger{ Logger::GetInstance()
+    };
+	pLogger->Initialize();
     const auto pGameObject{ std::make_unique<Engine::GameObject>() };
    if( !pGameObject->AddComponent<Engine::TestComponent>())
    {
-       OutputDebugStringA("ERROR: Component not added!\n");
+       pLogger->LogError(L"Cannot add TestComponent!\n");
    }
 
    m_pGamePad = std::make_unique<GamePad>();
 
    SceneUtils::LoadScenes();
-   Logger::GetInstance()->Initialize();
 }
 
 #pragma region Frame Update

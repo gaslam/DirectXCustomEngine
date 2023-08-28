@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 
+#include "Logger.h"
 #include "Managers/SceneManager.h"
 
 
@@ -51,10 +52,8 @@ void Renderer::CreateDeviceDependentResources()
     if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
         || (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_0))
     {
-#ifdef _DEBUG
-        OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
-#endif
-        throw std::runtime_error("Shader Model 6.0 is not supported!");
+        const auto pLogger{ Logger::GetInstance() };
+        pLogger->LogError(L"Shader Model 6.0 is not supported!");
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
@@ -126,7 +125,6 @@ void Renderer::Initialize(HWND window, int width, int height)
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
-    OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
 }
 
 // Helper method to clear the back buffers.

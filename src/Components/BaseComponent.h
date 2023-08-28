@@ -1,4 +1,5 @@
 #pragma once
+#include "Logger.h"
 namespace Engine
 {
 	class GameObject;
@@ -23,7 +24,15 @@ namespace Engine
 		virtual void OnOwnerDetach(GameObject* /*pObject*/) {}
 		virtual void OnSceneAttach() {}
 		virtual void OnSceneDetach() {}
-		void SetOwner(GameObject* pOwner) { m_pOwner = pOwner; }
+		void SetOwner(GameObject* pOwner)
+		{
+			if(!pOwner)
+			{
+				const auto pLogger{ Logger::GetInstance() };
+				pLogger->LogError(L"Owner cannot be a nullptr!!");
+			}
+			m_pOwner = pOwner;
+		}
 	private:
 		GameObject* m_pOwner{};
 	protected:

@@ -206,6 +206,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\Game.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\Main.cpp" />
     <ClCompile Include="Core\DeviceResources.cpp" />
