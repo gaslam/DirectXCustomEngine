@@ -26,11 +26,6 @@ namespace Engine
 		virtual void OnSceneDetach() {}
 		void SetOwner(GameObject* pOwner)
 		{
-			if(!pOwner)
-			{
-				const auto pLogger{ Logger::GetInstance() };
-				pLogger->LogError(L"Owner cannot be a nullptr!!");
-			}
 			m_pOwner = pOwner;
 		}
 	private:
