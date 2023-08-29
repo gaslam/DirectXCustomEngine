@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Logger.h"
 #include "Renderer.h"
+#include "Managers/InputManager.h"
 #include "Managers/SceneManager.h"
 
 #if _DEBUG
@@ -62,6 +63,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #endif
 
     g_game = std::make_unique<Game>();
+
+    Logger::GetInstance()->Initialize();
 
     // Register class and create window
     {
@@ -123,8 +126,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     g_game.reset();
     const auto pSceneManager{ Engine::SceneManager::GetInstance() };
+    const auto pInputManager{ Engine::InputManager::GetInstance() };
     const auto pLogger{ Logger::GetInstance() };
     pSceneManager->Destroy();
+    pInputManager->Destroy();
     pLogger->Destroy();
 
     return static_cast<int>(msg.wParam);

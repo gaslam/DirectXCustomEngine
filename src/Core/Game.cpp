@@ -11,6 +11,8 @@
 #include "SceneClasses/GameObject.h"
 #include "Managers/SceneManager.h"
 #include "SceneUtils.h"
+#include "Command/Command.h"
+#include "Managers/InputManager.h"
 
 extern void ExitGame() noexcept;
 
@@ -25,19 +27,26 @@ Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstanc
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-    m_pRenderer->Initialize(window, width, height);
     const auto pLogger{ Logger::GetInstance()
     };
-	pLogger->Initialize();
+    m_pRenderer->Initialize(window, width, height);
     const auto pGameObject{ std::make_unique<Engine::GameObject>() };
    if( !pGameObject->AddComponent<Engine::TestComponent>())
    {
        pLogger->LogError(L"Cannot add TestComponent!\n");
    }
 
-   m_pGamePad = std::make_unique<GamePad>();
-
    SceneUtils::LoadScenes();
+   const auto input{ Engine::InputManager::GetInstance() };
+   auto con{ XboxControllerButton::LSTICKDOWN };
+   auto con2{ XboxControllerButton::B };
+   auto con3{ XboxControllerButton::X };
+   auto con4{ XboxControllerButton::Y };
+   auto state{ DirectX::GamePad::ButtonStateTracker::RELEASED };
+   input->BindButtonsToCommand(0,con,state,new Engine::TestCommand{} );
+   input->BindButtonsToCommand(0,con2,state,new Engine::TestCommand{} );
+   input->BindButtonsToCommand(0,con3,state,new Engine::TestCommand{} );
+   input->BindButtonsToCommand(1,con4,state,new Engine::TestCommand{} );
 }
 
 #pragma region Frame Update
@@ -60,15 +69,30 @@ void Game::Update(DX::StepTimer const& timer)
     const float elapsedTime{ static_cast<float>(timer.GetElapsedSeconds()) };
 
     // TODO: Add your game logic here.
+    Engine::InputManager::GetInstance()->ProcessControllerInput(elapsedTime);
+    Engine::InputManager::GetInstance()->Update();
     m_pSceneManager->Update(elapsedTime);
 
     PIXEndEvent();
 
-    const auto pad{ m_pGamePad->GetState(0) };
-    if(pad.IsConnected() && pad.IsViewPressed())
-    {
-        ExitGame();
-    }
+    //const auto pad{ m_pGamePad->GetState(0) };
+    //if(pad.IsConnected())
+    //{
+    //    m_buttons.Update(pad);
+    //    if(pad.IsViewPressed())
+    //    {
+    //        ExitGame();
+    //    }
+    //}
+    //else
+    //{
+    //    m_buttons.Reset();
+    //}
+
+    //if(m_buttons.a == GamePad::ButtonStateTracker::PRESSED)
+    //{
+	   // 
+    //}
 }
 #pragma endregion
 
@@ -90,24 +114,25 @@ void Game::Render() const
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+    //m_buttons.Reset();
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
-    if(m_pGamePad)
-    {
-        m_pGamePad->Suspend();
-    }
+    //if(m_pGamePad)
+    //{
+    //    m_pGamePad->Suspend();
+    //}
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
-    if(m_pGamePad)
-    {
-        m_pGamePad->Resume();
-    }
+    //if(m_pGamePad)
+    //{
+    //    m_pGamePad->Resume();
+    //}
 }
 
 void Game::OnResuming()
@@ -115,6 +140,7 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+    //m_buttons.Reset();
 }
 
 // Properties

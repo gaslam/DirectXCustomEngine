@@ -14,7 +14,8 @@ class Renderer;
 
 namespace Engine
 {
-    class SceneManager;
+	class Command;
+	class SceneManager;
 }
 class Game final
 {
@@ -46,9 +47,9 @@ private:
     // Rendering loop timer.
     DX::StepTimer                               m_timer;
 
-    std::unique_ptr<DirectX::GamePad> m_pGamePad{};
     Microsoft::WRL::ComPtr<ID3D12Device> m_d3dDevice;
 
     Engine::SceneManager* m_pSceneManager{};
     std::unique_ptr<Renderer> m_pRenderer{};
+
 };
