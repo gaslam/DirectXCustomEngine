@@ -20,6 +20,7 @@ void Engine::Scene::RootRender()
 void Engine::Scene::RootInitialize()
 {
 	//Code to be added
+	Initialize();
 }
 
 void Engine::Scene::RootUpdate(float deltaTime)

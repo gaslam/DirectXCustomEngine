@@ -19,6 +19,14 @@ void SceneManager::Update(float deltaTime) const
 	}
 }
 
+void SceneManager::Initialize()
+{
+	for(const auto& scene: m_pScenes)
+	{
+		scene->RootInitialize();
+	}
+}
+
 void SceneManager::RemoveScene(Scene* scene)
 {
 	const auto it{ std::remove_if(m_pScenes.begin(),m_pScenes.end(),[scene](const std::unique_ptr<Scene>& pScene)
