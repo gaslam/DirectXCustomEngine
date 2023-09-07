@@ -31,6 +31,7 @@ struct KeyInput {
 	int controllerId{};
 	XboxControllerButton controllerButton;
 	DirectX::GamePad::ButtonStateTracker::ButtonState state;
+	DirectX::Keyboard::Keys keyboardKey;
 
 	bool operator<(const KeyInput& rhs) const
 	{

@@ -5,13 +5,9 @@
 #include "pch.h"
 #include "Game.h"
 
-#include "Logger.h"
 #include "Renderer.h"
-#include "Components/TestComponent.h"
-#include "SceneClasses/GameObject.h"
 #include "Managers/SceneManager.h"
 #include "SceneUtils.h"
-#include "Command/Command.h"
 #include "Managers/InputManager.h"
 
 extern void ExitGame() noexcept;
@@ -27,26 +23,9 @@ Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstanc
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-    const auto pLogger{ Logger::GetInstance()
-    };
     m_pRenderer->Initialize(window, width, height);
-    const auto pGameObject{ std::make_unique<Engine::GameObject>() };
-   if( !pGameObject->AddComponent<Engine::TestComponent>())
-   {
-       pLogger->LogError(L"Cannot add TestComponent!\n");
-   }
-
+    Engine::InputManager::GetInstance();
    SceneUtils::LoadScenes();
-   const auto input{ Engine::InputManager::GetInstance() };
-   auto con{ XboxControllerButton::LSTICKDOWN };
-   auto con2{ XboxControllerButton::B };
-   auto con3{ XboxControllerButton::X };
-   auto con4{ XboxControllerButton::Y };
-   auto state{ DirectX::GamePad::ButtonStateTracker::RELEASED };
-   input->BindButtonsToCommand(0,con,state,new Engine::TestCommand{} );
-   input->BindButtonsToCommand(0,con2,state,new Engine::TestCommand{} );
-   input->BindButtonsToCommand(0,con3,state,new Engine::TestCommand{} );
-   input->BindButtonsToCommand(1,con4,state,new Engine::TestCommand{} );
 }
 
 #pragma region Frame Update
@@ -114,25 +93,23 @@ void Game::Render() const
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
-    //m_buttons.Reset();
+    const auto inputManager{ Engine::InputManager::GetInstance() };
+    inputManager->Resume();
 }
 
 void Game::OnDeactivated()
 {
-    // TODO: Game is becoming background window.
-    //if(m_pGamePad)
-    //{
-    //    m_pGamePad->Suspend();
-    //}
+    // TODO: Game is becoming background window
+    // causes leak
+	const auto inputManager{ Engine::InputManager::GetInstance() };
+    inputManager->Suspend();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
-    //if(m_pGamePad)
-    //{
-    //    m_pGamePad->Resume();
-    //}
+    const auto inputManager{ Engine::InputManager::GetInstance() };
+    inputManager->Suspend();
 }
 
 void Game::OnResuming()
@@ -140,7 +117,8 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
-    //m_buttons.Reset();
+    const auto inputManager{ Engine::InputManager::GetInstance() };
+    inputManager->Resume();
 }
 
 // Properties

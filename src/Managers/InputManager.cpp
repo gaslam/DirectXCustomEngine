@@ -7,7 +7,12 @@
 
 Engine::InputManager::InputManager()
 {
-	m_pGamepad = std::make_unique<DirectX::GamePad>();
+	m_pGamepad = std::make_unique<GamePad>();
+	m_pMouse = std::make_unique<Mouse>();
+	m_pKeyboard = std::make_unique<Keyboard>();
+
+	const HWND hWnd{ GetActiveWindow() };
+	m_pMouse->SetWindow(hWnd);
 }
 
 void Engine::InputManager::ProcessControllerInput(float /*deltaTime*/)
@@ -32,7 +37,7 @@ void Engine::InputManager::ProcessControllerInput(float /*deltaTime*/)
 	}
 }
 
-void Engine::InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& button, DirectX::GamePad::ButtonStateTracker::ButtonState& state, Engine::Command* command)
+void Engine::InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Engine::Command* command)
 {
 	KeyInput input{};
 	input.id = static_cast<int>(m_Commands.size());
@@ -40,6 +45,21 @@ void Engine::InputManager::BindButtonsToCommand(unsigned int id, XboxControllerB
 	input.controllerButton = button;
 	input.state = state;
 	m_Commands.insert({ input,std::unique_ptr<Engine::Command>(command) });
+}
+
+void Engine::InputManager::BindButtonsToInput(unsigned int id, XboxControllerButton& button,Keyboard::Keys& keyboardKey, const std::wstring& input)
+{
+	KeyInput keyInput{};
+	keyInput.id = static_cast<int>(m_Commands.size());
+	keyInput.controllerId = id;
+	keyInput.controllerButton = button;
+	keyInput.keyboardKey = keyboardKey;
+	if(m_Inputs.contains(input))
+	{
+		const auto pLogger{ Logger::GetInstance() };
+		pLogger->LogError(L"Input already exists. Try another value!!");
+	}
+	m_Inputs.insert({ input,keyInput });
 }
 
 void Engine::InputManager::Update()
@@ -53,9 +73,11 @@ void Engine::InputManager::Update()
 		}
 		m_buttons.Update(pad);
 	}
+	const auto pKeyState{ m_pKeyboard->GetState() };
+	m_keyboardState.Update(pKeyState);
 }
 
-DirectX::GamePad::ButtonStateTracker::ButtonState Engine::InputManager::GetButtonState(const XboxControllerButton& button) const
+GamePad::ButtonStateTracker::ButtonState Engine::InputManager::GetButtonState(const XboxControllerButton& button) const
 {
 	switch (button)
 	{
@@ -105,4 +127,119 @@ DirectX::GamePad::ButtonStateTracker::ButtonState Engine::InputManager::GetButto
 		return m_buttons.rightTrigger;
 	default: return {};
 	}
+}
+
+bool Engine::InputManager::IsPressed(const std::wstring& input)
+{
+	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
+		{
+			if (pair.first == input)
+			{
+				return true;
+			}
+			return false;
+		}) };
+
+	if (it == m_Inputs.end())
+	{
+		return false;
+	}
+
+	auto keyInput{ *it };
+	const auto button{ GetButtonState(it->second.controllerButton) };
+	if(button == m_buttons.PRESSED)
+	{
+		return true;
+	}
+
+	return m_keyboardState.IsKeyPressed(keyInput.second.keyboardKey);
+
+}
+
+bool Engine::InputManager::IsUp(const std::wstring& input)
+{
+	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
+		{
+			if (pair.first == input)
+			{
+				return true;
+			}
+			return false;
+		}) };
+
+	if (it == m_Inputs.end())
+	{
+		return false;
+	}
+
+	const auto keyInput{ *it };
+	const auto button{ GetButtonState(it->second.controllerButton) };
+
+	if (button != m_buttons.UP || (GetAsyncKeyState(it->second.keyboardKey) & 0x8000) != 0)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool Engine::InputManager::IsReleased(const std::wstring& input)
+{
+	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
+		{
+			if (pair.first == input)
+			{
+				return true;
+			}
+			return false;
+		}) };
+
+	if (it == m_Inputs.end())
+	{
+		return false;
+	}
+
+	const auto keyInput{ *it };
+	const auto button{ GetButtonState(it->second.controllerButton) };
+	if(button == m_buttons.RELEASED)
+	{
+		return true;
+	}
+
+	return m_keyboardState.IsKeyReleased(keyInput.second.keyboardKey);
+}
+
+bool Engine::InputManager::IsHeld(const std::wstring& input)
+{
+	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
+		{
+			if (pair.first == input)
+			{
+				return true;
+			}
+			return false;
+		}) };
+
+	if (it == m_Inputs.end())
+	{
+		return false;
+	}
+
+	auto keyInput{ *it };
+	const auto button{ GetButtonState(it->second.controllerButton) };
+	if (button == m_buttons.HELD || (GetAsyncKeyState(it->second.keyboardKey) & 0x8000) != 0)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Engine::InputManager::Resume()
+{
+	m_pGamepad->Resume();
+}
+
+void Engine::InputManager::Suspend()
+{
+	m_pGamepad->Suspend();
 }
