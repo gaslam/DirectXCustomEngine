@@ -19,7 +19,7 @@ void SceneManager::Update(float deltaTime) const
 	}
 }
 
-void SceneManager::Initialize()
+void SceneManager::Initialize() const
 {
 	for(const auto& scene: m_pScenes)
 	{

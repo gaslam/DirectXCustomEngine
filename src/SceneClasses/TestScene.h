@@ -11,10 +11,10 @@ namespace Engine
 		TestScene() : Scene(L"TestScene") {}
 		~TestScene() override = default;
 
-		void Initialize() override {};
+		void Initialize() override;
 		void Render() override {};
 		void PostRender() override {};
-		void Update(float /*deltaTime*/) override {};
+		void Update(float /*deltaTime*/) override;
 	};
 }
 

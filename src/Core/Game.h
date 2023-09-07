@@ -30,7 +30,7 @@ public:
     void Tick();
 
     // Messages
-    void OnActivated();
+    static void OnActivated();
     void OnDeactivated();
     void OnSuspending();
     void OnResuming();

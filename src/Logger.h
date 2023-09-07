@@ -3,6 +3,8 @@
 #include <source_location>
 #include <map>
 
+using namespace std;
+
 enum class LogLevel : UINT {
 	WARNING,
 	ERROR,
@@ -11,9 +13,9 @@ enum class LogLevel : UINT {
 
 struct InfoLog
 {
-	std::wstring warningText{};
-	std::source_location fileLocation{};
-	InfoLog(const wchar_t* text, const std::source_location& location = std::source_location::current()) :
+	wstring warningText{};
+	source_location fileLocation{};
+	InfoLog(const wchar_t* text, const source_location& location = source_location::current()) :
 	warningText{text},
 	fileLocation{location}
 	{
@@ -30,13 +32,13 @@ public:
 	void LogInfo(const InfoLog& info) const;
 private:
 	HANDLE m_pConsoleHandle{};
-	std::wostream* m_Os {nullptr};
+	wostream* m_Os {nullptr};
 	void HandleLog(LogLevel type, const InfoLog& info) const;
 	struct LogType
 	{
 		WORD color;
-		std::wstring typeName;
+		wstring typeName;
 	};
-	static std::map<LogLevel, LogType> m_LogTypes;
+	static map<LogLevel, LogType> m_LogTypes;
 };
 

@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Scene.h"
 
-void Engine::Scene::RootRender()
+using namespace Engine;
+
+void Scene::RootRender()
 {
 	Render();
 	for (const auto& child : m_pChildren)
@@ -17,13 +19,13 @@ void Engine::Scene::RootRender()
 	}
 }
 
-void Engine::Scene::RootInitialize()
+void Scene::RootInitialize()
 {
 	//Code to be added
 	Initialize();
 }
 
-void Engine::Scene::RootUpdate(float deltaTime)
+void Scene::RootUpdate(float deltaTime)
 {
 	Update(deltaTime);
 
@@ -33,14 +35,14 @@ void Engine::Scene::RootUpdate(float deltaTime)
 	}
 }
 
-void Engine::Scene::AddChild(GameObject* object)
+void Scene::AddChild(GameObject* object)
 {
 
 	m_pChildren.emplace_back(std::unique_ptr<GameObject>(object));
 
 }
 
-void Engine::Scene::RemoveChild(GameObject* object)
+void Scene::RemoveChild(GameObject* object)
 {
 	const auto it{ std::find_if(m_pChildren.begin(),m_pChildren.end(),[object](const std::unique_ptr<GameObject>& other)
 	{

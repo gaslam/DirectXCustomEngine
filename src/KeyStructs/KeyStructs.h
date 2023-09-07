@@ -1,4 +1,6 @@
 #pragma once
+using namespace DirectX;
+
 
 enum XboxControllerButton
 {
@@ -30,8 +32,8 @@ struct KeyInput {
 	int id{};
 	int controllerId{};
 	XboxControllerButton controllerButton;
-	DirectX::GamePad::ButtonStateTracker::ButtonState state;
-	DirectX::Keyboard::Keys keyboardKey;
+	GamePad::ButtonStateTracker::ButtonState state;
+	Keyboard::Keys keyboardKey;
 
 	bool operator<(const KeyInput& rhs) const
 	{

@@ -57,11 +57,10 @@ void Logger::LogInfo(const InfoLog& info) const
 void Logger::HandleLog(LogLevel type, const InfoLog& info) const
 {
 	CONSOLE_SCREEN_BUFFER_INFO   csbi;
-	WORD currentAttributeConsole;
 	GetConsoleScreenBufferInfo(m_pConsoleHandle,&csbi);
-	currentAttributeConsole = csbi.wAttributes;
+	const WORD currentAttributeConsole{ csbi.wAttributes };
 
-	auto typeInfo{ m_LogTypes[type]};
+	const auto typeInfo{ m_LogTypes[type]};
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 

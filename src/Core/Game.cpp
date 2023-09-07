@@ -24,7 +24,6 @@ Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstanc
 void Game::Initialize(HWND window, int width, int height)
 {
     m_pRenderer->Initialize(window, width, height);
-    Engine::InputManager::GetInstance();
    SceneUtils::LoadScenes();
 }
 
@@ -54,24 +53,6 @@ void Game::Update(DX::StepTimer const& timer)
 
     PIXEndEvent();
 
-    //const auto pad{ m_pGamePad->GetState(0) };
-    //if(pad.IsConnected())
-    //{
-    //    m_buttons.Update(pad);
-    //    if(pad.IsViewPressed())
-    //    {
-    //        ExitGame();
-    //    }
-    //}
-    //else
-    //{
-    //    m_buttons.Reset();
-    //}
-
-    //if(m_buttons.a == GamePad::ButtonStateTracker::PRESSED)
-    //{
-	   // 
-    //}
 }
 #pragma endregion
 

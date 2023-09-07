@@ -5,7 +5,9 @@
 #include "KeyStructs/KeyStructs.h"
 #include "Command/Command.h"
 
-Engine::InputManager::InputManager()
+using namespace Engine;
+
+InputManager::InputManager()
 {
 	m_pGamepad = std::make_unique<GamePad>();
 	m_pMouse = std::make_unique<Mouse>();
@@ -15,7 +17,7 @@ Engine::InputManager::InputManager()
 	m_pMouse->SetWindow(hWnd);
 }
 
-void Engine::InputManager::ProcessControllerInput(float /*deltaTime*/)
+void InputManager::ProcessControllerInput(float /*deltaTime*/)
 {
 	for (int i{}; i < 4; ++i)
 	{
@@ -37,17 +39,17 @@ void Engine::InputManager::ProcessControllerInput(float /*deltaTime*/)
 	}
 }
 
-void Engine::InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Engine::Command* command)
+void InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Command* command)
 {
 	KeyInput input{};
 	input.id = static_cast<int>(m_Commands.size());
 	input.controllerId = id;
 	input.controllerButton = button;
 	input.state = state;
-	m_Commands.insert({ input,std::unique_ptr<Engine::Command>(command) });
+	m_Commands.insert({ input,std::unique_ptr<Command>(command) });
 }
 
-void Engine::InputManager::BindButtonsToInput(unsigned int id, XboxControllerButton& button,Keyboard::Keys& keyboardKey, const std::wstring& input)
+void InputManager::BindButtonsToInput(unsigned int id, XboxControllerButton& button,Keyboard::Keys& keyboardKey, const std::wstring& input)
 {
 	KeyInput keyInput{};
 	keyInput.id = static_cast<int>(m_Commands.size());
@@ -62,7 +64,7 @@ void Engine::InputManager::BindButtonsToInput(unsigned int id, XboxControllerBut
 	m_Inputs.insert({ input,keyInput });
 }
 
-void Engine::InputManager::Update()
+void InputManager::Update()
 {
 	for (int i{}; i < 4; ++i)
 	{
@@ -77,7 +79,7 @@ void Engine::InputManager::Update()
 	m_keyboardState.Update(pKeyState);
 }
 
-GamePad::ButtonStateTracker::ButtonState Engine::InputManager::GetButtonState(const XboxControllerButton& button) const
+GamePad::ButtonStateTracker::ButtonState InputManager::GetButtonState(const XboxControllerButton& button) const
 {
 	switch (button)
 	{
@@ -129,7 +131,7 @@ GamePad::ButtonStateTracker::ButtonState Engine::InputManager::GetButtonState(co
 	}
 }
 
-bool Engine::InputManager::IsPressed(const std::wstring& input)
+bool InputManager::IsPressed(const std::wstring& input)
 {
 	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
 		{
@@ -156,7 +158,7 @@ bool Engine::InputManager::IsPressed(const std::wstring& input)
 
 }
 
-bool Engine::InputManager::IsUp(const std::wstring& input)
+bool InputManager::IsUp(const std::wstring& input)
 {
 	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
 		{
@@ -183,7 +185,7 @@ bool Engine::InputManager::IsUp(const std::wstring& input)
 	return true;
 }
 
-bool Engine::InputManager::IsReleased(const std::wstring& input)
+bool InputManager::IsReleased(const std::wstring& input)
 {
 	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
 		{
@@ -209,7 +211,7 @@ bool Engine::InputManager::IsReleased(const std::wstring& input)
 	return m_keyboardState.IsKeyReleased(keyInput.second.keyboardKey);
 }
 
-bool Engine::InputManager::IsHeld(const std::wstring& input)
+bool InputManager::IsHeld(const std::wstring& input)
 {
 	const auto it{ std::find_if(m_Inputs.begin(), m_Inputs.end(), [input](const std::pair<std::wstring, KeyInput>& pair)
 		{
@@ -234,12 +236,12 @@ bool Engine::InputManager::IsHeld(const std::wstring& input)
 	return false;
 }
 
-void Engine::InputManager::Resume()
+void InputManager::Resume() const
 {
 	m_pGamepad->Resume();
 }
 
-void Engine::InputManager::Suspend()
+void InputManager::Suspend() const
 {
 	m_pGamepad->Suspend();
 }

@@ -27,7 +27,7 @@ namespace Engine
 			scenePointer->RootInitialize();
 			return scenePointer;
 		}
-		void Initialize();
+		void Initialize() const;
 		void RemoveScene(Scene* scene);
 		void SetScene(const std::wstring& name);
 		void SetScene(UINT id);
