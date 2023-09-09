@@ -210,8 +210,9 @@
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\Game.h" />
+    <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Managers\InputManager.h" />
-    <ClInclude Include="KeyStructs\KeyStructs.h" />
+    <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Misc\Singleton.h" />
     <ClInclude Include="pch.h" />

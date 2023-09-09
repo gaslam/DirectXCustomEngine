@@ -18,8 +18,9 @@
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Command\Command.h" />
-    <ClInclude Include="KeyStructs\KeyStructs.h" />
+    <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Managers\InputManager.h" />
+    <ClInclude Include="Structs\KeyStructs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

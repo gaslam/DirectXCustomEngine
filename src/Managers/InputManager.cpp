@@ -2,7 +2,7 @@
 #include "InputManager.h"
 
 #include "Logger.h"
-#include "KeyStructs/KeyStructs.h"
+#include "Structs/KeyStructs.h"
 #include "Command/Command.h"
 
 using namespace Engine;

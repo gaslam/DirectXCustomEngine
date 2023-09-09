@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TestScene.h"
 
-#include "KeyStructs/KeyStructs.h"
+#include "Structs/KeyStructs.h"
 #include "Managers/InputManager.h"
 
 using namespace Engine;

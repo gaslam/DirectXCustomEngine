@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Command/Command.h"
-#include "KeyStructs/KeyStructs.h"
+#include "Structs/KeyStructs.h"
 #include "Misc/Singleton.h"
 
 using namespace DirectX;
