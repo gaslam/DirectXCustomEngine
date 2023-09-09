@@ -14,7 +14,7 @@
     <ClInclude Include="Managers\SceneManager.h" />
     <ClInclude Include="SceneClasses\Scene.h" />
     <ClInclude Include="SceneUtils.h" />
-    <ClInclude Include="SceneClasses\TestScene.h" />
+    <ClInclude Include="Scenes\TestScene.h" />
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Command\Command.h" />
@@ -29,7 +29,7 @@
     <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="Managers\SceneManager.cpp" />
     <ClCompile Include="SceneClasses\Scene.cpp" />
-    <ClCompile Include="SceneClasses\TestScene.cpp" />
+    <ClCompile Include="Scenes\TestScene.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Managers\InputManager.cpp" />

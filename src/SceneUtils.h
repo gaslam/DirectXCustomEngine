@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "Managers/SceneManager.h"
-#include "SceneClasses/TestScene.h"
+#include "Scenes/TestScene.h"
 // I am planning to replace this with a file reader
 
 namespace SceneUtils
