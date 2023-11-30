@@ -9,6 +9,7 @@
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
+#include "Structs/Contexts.h"
 
 class Renderer;
 
@@ -33,6 +34,8 @@ public:
     static void OnActivated();
     void OnDeactivated();
     void OnSuspending();
+    void OnDeviceLost();
+    void OnWindowSizeChanged(const int width, const int height);
     void OnResuming();
 
     // Properties
@@ -41,15 +44,15 @@ public:
 
 private:
 
-    void Update(DX::StepTimer const& timer);
+    void Update();
     void Render() const;
 
     // Rendering loop timer.
-    DX::StepTimer                               m_timer;
+    DX::StepTimer m_timer;
 
     Microsoft::WRL::ComPtr<ID3D12Device> m_d3dDevice;
 
     Engine::SceneManager* m_pSceneManager{};
     std::unique_ptr<Renderer> m_pRenderer{};
-
+    GameContext m_Context{};
 };

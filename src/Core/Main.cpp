@@ -197,7 +197,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             if(const auto pRenderer{ game ? game->GetRenderer() : nullptr })
             {
-                pRenderer->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+                const int width{ HIWORD(lParam) }, height { HIWORD(lParam) };
+                pRenderer->OnWindowSizeChanged(width,height );
+                game->OnWindowSizeChanged(width, height);
             }
         }
         break;
@@ -212,8 +214,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             RECT rc;
             GetClientRect(hWnd, &rc);
-
-            pRenderer->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+            const int width{ rc.right - rc.left }, height{ rc.bottom - rc.top };
+            pRenderer->OnWindowSizeChanged(width,height);
+            game->OnWindowSizeChanged(width, height);
         }
         break;
 

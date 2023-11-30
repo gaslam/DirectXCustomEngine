@@ -11,19 +11,19 @@ void SceneManager::Render() const
 	}
 }
 
-void SceneManager::Update(float deltaTime) const
+void SceneManager::Update() const
 {
 	if (m_pActiveScene)
 	{
-		m_pActiveScene->RootUpdate(deltaTime);
+		m_pActiveScene->RootUpdate();
 	}
 }
 
-void SceneManager::Initialize() const
+void SceneManager::Initialize(GameContext& gameContext) const
 {
 	for(const auto& scene: m_pScenes)
 	{
-		scene->RootInitialize();
+		scene->RootInitialize(gameContext);
 	}
 }
 
@@ -111,5 +111,13 @@ void SceneManager::GoToPreviousScene()
 		}
 		const auto newScene{ m_pScenes[i].get() };
 		ChangeScene(newScene);
+	}
+}
+
+void SceneManager::OnDeviceLost()
+{
+	if(m_pActiveScene)
+	{
+		m_pActiveScene->RootOnDeviceLost();
 	}
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include "Logger.h"
+#include "Structs/Contexts.h"
+
 namespace Engine
 {
 	class GameObject;
@@ -14,16 +16,17 @@ namespace Engine
 		BaseComponent& operator=(const BaseComponent& other) = delete;
 		BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
 
-		virtual void Initialize() = 0;
+		virtual void Initialize(const SceneContext& context) = 0;
 		virtual void PostInitialize() {}
-		virtual void Update(float /*elapsedTime*/) {}
-		virtual void Render() {}
+		virtual void Update(const SceneContext&) {}
+		virtual void Render(const SceneContext&) {}
 		virtual void ShadowMapRender() {}
 		virtual void PostRender() {}
 		virtual void OnOwnerAttach(GameObject* /*pOwner*/) {}
 		virtual void OnOwnerDetach(GameObject* /*pObject*/) {}
 		virtual void OnSceneAttach() {}
 		virtual void OnSceneDetach() {}
+		virtual void OnDeviceLost(){}
 		void SetOwner(GameObject* pOwner)
 		{
 			m_pOwner = pOwner;

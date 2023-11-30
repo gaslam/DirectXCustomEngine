@@ -18,13 +18,22 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstance() }, m_pRenderer{std::make_unique<Renderer>()}
 {
+    m_Context.d12Context.pDeviceResources = m_pRenderer->GetDeviceResources();
+    int windowWidth{}, windowHeight{};
+    GetDefaultSize(windowWidth, windowHeight);
+    m_Context.windowWidth = windowWidth;
+    m_Context.windowHeight = windowHeight;
+    m_Context.timer = &m_timer;
+
 }
 
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
     m_pRenderer->Initialize(window, width, height);
+    
    SceneUtils::LoadScenes();
+   Engine::SceneManager::GetInstance()->Initialize(m_Context);
 }
 
 #pragma region Frame Update
@@ -33,23 +42,23 @@ void Game::Tick()
 {
     m_timer.Tick([&]()
     {
-        Update(m_timer);
+        Update();
     });
 
     Render();
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Game::Update()
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
-    const float elapsedTime{ static_cast<float>(timer.GetElapsedSeconds()) };
+    //float elapsedTime{static_cast<float>(timer.GetElapsedSeconds())};
 
     // TODO: Add your game logic here.
-    Engine::InputManager::GetInstance()->ProcessControllerInput(elapsedTime);
+   // Engine::InputManager::GetInstance()->ProcessControllerInput(elapsedTime);
     Engine::InputManager::GetInstance()->Update();
-    m_pSceneManager->Update(elapsedTime);
+    m_pSceneManager->Update();
 
     PIXEndEvent();
 
@@ -91,6 +100,12 @@ void Game::OnSuspending()
     // TODO: Game is being power-suspended (or minimized).
     const auto inputManager{ Engine::InputManager::GetInstance() };
     inputManager->Suspend();
+}
+
+void Game::OnWindowSizeChanged(const int width, const int height)
+{
+    m_Context.windowHeight = height;
+    m_Context.windowWidth = width;
 }
 
 void Game::OnResuming()

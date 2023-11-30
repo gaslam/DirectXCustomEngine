@@ -206,20 +206,22 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CameraFixed.h" />
+    <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Command\Command.h" />
     <ClInclude Include="Components\BaseComponent.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\Game.h" />
+    <ClInclude Include="Components\MeshRenderComponent.h" />
+    <ClInclude Include="Structs\Contexts.h" />
     <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Managers\InputManager.h" />
-    <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Misc\Singleton.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="SceneClasses\Scene.h" />
     <ClInclude Include="SceneClasses\GameObject.h" />
-    <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="Managers\SceneManager.h" />
     <ClInclude Include="SceneUtils.h" />
     <ClInclude Include="Scenes\TestScene.h" />
@@ -228,20 +230,23 @@
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CameraFixed.cpp" />
+    <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\Main.cpp" />
     <ClCompile Include="Core\DeviceResources.cpp" />
     <ClCompile Include="Managers\InputManager.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Components\MeshRenderComponent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="Managers\SceneManager.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
+    <ClCompile Include="SceneClasses\GameObject.cpp" />
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="Scenes\TestScene.cpp" />
   </ItemGroup>

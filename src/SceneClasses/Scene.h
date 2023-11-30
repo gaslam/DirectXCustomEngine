@@ -1,12 +1,13 @@
 #pragma once
 #include "GameObject.h"
+#include "Structs/Contexts.h"
 
 namespace Engine
 {
 	class Scene
 	{
 	public:
-		explicit Scene(const std::wstring& name) : m_Name{name}
+		explicit Scene(std::wstring name) : m_Name{std::move(name)}, m_SceneContext{}
 		{
 			
 		}
@@ -18,24 +19,32 @@ namespace Engine
 		bool operator==(Scene&& other) noexcept = delete;
 
 		void RootRender();
-		void RootInitialize();
-		void RootUpdate(float deltaTime);
+		void RootInitialize(GameContext& context);
+		void RootUpdate();
 		virtual void OnSceneDeactivated() {};
 		virtual void OnSceneActivated() {};
+		void RootOnDeviceLost();
+		virtual void OnDeviceLost() {};
 		std::wstring GetName() const { return m_Name; }
+		[[nodiscard]] SceneContext GetSceneContext() const { return m_SceneContext; }
 
 	protected:
-		virtual void Initialize() = 0;
+		virtual void Initialize();
 		virtual void Render(){};
 		virtual void PostRender(){};
-		virtual void Update(float /*deltaTime*/){};
+		virtual void Update(const SceneContext&){};
 
-		void AddChild(GameObject* object);
+		GameObject* AddChild(GameObject* object);
 		void RemoveChild(GameObject* object);
 	private:
 		const std::wstring m_Name{};
 
+		CameraComponent* m_pActiveCamera{};
+		CameraComponent* m_pDefaultCamera{};
+
 		std::vector<std::unique_ptr<GameObject>> m_pChildren{};
+
+		SceneContext m_SceneContext{};
 	};
 }
 

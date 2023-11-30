@@ -9,9 +9,20 @@
 using namespace std;
 namespace Engine
 {
-	class GameObject final
+	class Scene;
+
+	class GameObject
 	{
 	public:
+
+		GameObject() = default;
+		virtual ~GameObject() = default;
+
+		GameObject(const GameObject&) = delete;
+		GameObject(GameObject&&) noexcept = delete;
+		GameObject& operator=(const GameObject&) = delete;
+		GameObject& operator=(GameObject&&) noexcept = delete;
+
 		template <typename T>
 		enable_if_t<is_base_of_v<BaseComponent, T>, bool> IsComponentAdded()
 		{
@@ -41,7 +52,6 @@ namespace Engine
 			const type_index typeIndex { type_index(typeid(T))};
 			auto pComponent{ make_unique<T>(forward<Args>(args)...) };
 			pComponent->SetOwner(nullptr);
-			pComponent->Initialize();
 			pComponent->OnOwnerAttach(this);
 			auto pointer{ pComponent.get()};
 			m_pComponents.emplace(typeIndex, move(pComponent));
@@ -72,30 +82,43 @@ namespace Engine
 
 		void AddChild(GameObject* child)
 		{
+			child->RootSceneAttach(m_pParentScene);
 			m_pChildren.emplace_back(child);
 		}
 
-		void Update(float elapsedTime) const
+		void Update(const SceneContext& context) const
 		{
 			for(const auto& val : m_pComponents | views::values)
 			{
-				val->Update(elapsedTime);
+				val->Update(context);
 			}
 			for(const auto& pChild: m_pChildren)
 			{
-				pChild->Update(elapsedTime);
+				pChild->Update(context);
 			}
 		}
 
-		void Render() const
+		void OnDeviceLost() const
+		{
+			for (const auto& val : m_pComponents | views::values)
+			{
+				val->OnDeviceLost();
+			}
+			for (const auto& pChild : m_pChildren)
+			{
+				pChild->OnDeviceLost();
+			}
+		}
+
+		void Render(const SceneContext& context) const
 		{
 			for(const auto& val : m_pComponents | views::values)
 			{
-				val->Render();
+				val->Render(context);
 			}
 			for(const auto& pChild: m_pChildren)
 			{
-				pChild->Render();
+				pChild->Render(context);
 			}
 		}
 
@@ -111,8 +134,25 @@ namespace Engine
 			}
 		}
 
+		Scene* GetParentScene() const { return m_pParentScene; }
+
+	protected:
+		void RootInitialize(const SceneContext& sceneContext)
+		{
+			Initialize(sceneContext);
+			for(const auto& pComponent: m_pComponents| views::values)
+			{
+				pComponent->Initialize(sceneContext);
+			}
+		}
+
+		virtual void Initialize(const SceneContext&) {};
+
 	private:
+		friend class Scene;
+		void RootSceneAttach(Scene* pScene);
 		GameObject* m_pParent{};
+		Scene* m_pParentScene{};
 
 		vector<GameObject*> m_pChildren{};
 		unordered_map<type_index, unique_ptr<BaseComponent>> m_pComponents{};

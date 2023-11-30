@@ -21,19 +21,25 @@ struct InfoLog
 	{
 		
 	}
+	InfoLog(const wstring text, const source_location& location = source_location::current()) :
+		warningText{ text },
+		fileLocation{ location }
+	{
+
+	}
 };
 
 class Logger : public Singleton<Logger>
 {
 public:
 	void Initialize();
-	void LogWarning(const InfoLog& info) const;
-	void LogError(const InfoLog& info) const;
-	void LogInfo(const InfoLog& info) const;
+	static void LogWarning(const InfoLog& info);
+	static void LogError(const InfoLog& info);
+	static void LogInfo(const InfoLog& info);
 private:
-	HANDLE m_pConsoleHandle{};
-	wostream* m_Os {nullptr};
-	void HandleLog(LogLevel type, const InfoLog& info) const;
+	static inline HANDLE m_pConsoleHandle{};
+	static inline wostream* m_Os {nullptr};
+	static void HandleLog(LogLevel type, const InfoLog& info);
 	struct LogType
 	{
 		WORD color;

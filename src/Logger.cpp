@@ -37,24 +37,24 @@ void Logger::Initialize()
 #endif
 }
 
-void Logger::LogWarning(const InfoLog& info) const
+void Logger::LogWarning(const InfoLog& info)
 {
 	HandleLog(LogLevel::WARNING, info);
 }
 
-void Logger::LogError(const InfoLog& info) const
+void Logger::LogError(const InfoLog& info)
 {
 	HandleLog(LogLevel::ERROR, info);
 }
 
-void Logger::LogInfo(const InfoLog& info) const
+void Logger::LogInfo(const InfoLog& info)
 {
 	HandleLog(LogLevel::INFO, info);
 }
 
 
 
-void Logger::HandleLog(LogLevel type, const InfoLog& info) const
+void Logger::HandleLog(LogLevel type, const InfoLog& info)
 {
 	CONSOLE_SCREEN_BUFFER_INFO   csbi;
 	GetConsoleScreenBufferInfo(m_pConsoleHandle,&csbi);

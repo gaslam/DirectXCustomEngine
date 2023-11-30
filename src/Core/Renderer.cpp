@@ -4,15 +4,8 @@
 #include "Logger.h"
 #include "Managers/SceneManager.h"
 
-namespace
-{
-    const DirectX::XMVECTORF32 START_POSITION = { 0.f, -1.5f, 0.f, 0.f };
-    const DirectX::XMVECTORF32 ROOM_BOUNDS = { 8.f, 6.f, 12.f, 0.f };
-    constexpr float ROTATION_GAIN = 0.1f;
-}
 
-
-Renderer::Renderer() : m_pitch{},m_yaw{},m_cameraPos{START_POSITION},m_roomColor{DirectX::Colors::White},
+Renderer::Renderer() :
 m_deviceResources{ std::make_unique<DX::DeviceResources>() }
 {
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
@@ -34,9 +27,6 @@ void Renderer::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
 
-    const auto size{ m_deviceResources->GetOutputSize() };
-    m_proj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(DirectX::XMConvertToRadians(70.f),
-        static_cast<float>(size.right) / static_cast<float>(size.bottom), 0.01f, 100.f);
 }
 
 void Renderer::OnDeviceLost()
@@ -45,12 +35,8 @@ void Renderer::OnDeviceLost()
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
 	m_pGraphicsMemory.reset();
-
-    m_room.reset();
-    m_roomTex.Reset();
-    m_resourceDescriptors.reset();
-    m_states.reset();
-    m_roomEffect.reset();
+    const auto pSceneManager{ Engine::SceneManager::GetInstance() };
+    pSceneManager->OnDeviceLost();
 }
 
 void Renderer::OnDeviceRestored()
@@ -78,39 +64,6 @@ void Renderer::CreateDeviceDependentResources()
     m_pGraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = std::make_unique<DirectX::DescriptorHeap>(device, 1);
-    m_states = std::make_unique<DirectX::CommonStates>(device);
-    m_room = DirectX::GeometricPrimitive::CreateBox(DirectX::XMFLOAT3(ROOM_BOUNDS[0], ROOM_BOUNDS[1], ROOM_BOUNDS[2]),false,true);
-    DirectX::RenderTargetState rtState{m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat()};
-    {
-        DirectX::EffectPipelineStateDescription pd(
-            &DirectX::GeometricPrimitive::VertexType::InputLayout,
-            DirectX::CommonStates::Opaque,
-            DirectX::CommonStates::DepthDefault,
-            DirectX::CommonStates::CullCounterClockwise,
-            rtState);
-
-        m_roomEffect = std::make_unique<DirectX::BasicEffect>(device, DirectX::EffectFlags::Lighting | DirectX::EffectFlags::Texture, pd);
-        m_roomEffect->EnableDefaultLighting();
-    }
-
-    DirectX::ResourceUploadBatch resourceUpload(device);
-
-    resourceUpload.Begin();
-
-    DX::ThrowIfFailed(DirectX::CreateDDSTextureFromFile(device, resourceUpload,
-                                                        L"roomtexture.dds",
-                                                        m_roomTex.ReleaseAndGetAddressOf()));
-
-    DirectX::CreateShaderResourceView(device, m_roomTex.Get(),
-                                      m_resourceDescriptors->GetFirstCpuHandle());
-
-    m_roomEffect->SetTexture(m_resourceDescriptors->GetFirstGpuHandle(),
-        m_states->LinearClamp());
-
-    auto uploadResourcesFinished = resourceUpload.End(
-        m_deviceResources->GetCommandQueue());
-    uploadResourcesFinished.wait();
 
     m_deviceResources->WaitForGpu();
 
@@ -147,18 +100,6 @@ void Renderer::Render() const
     const auto commandList{ m_deviceResources->GetCommandList() };
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
-    // TODO: Add your rendering code here.
-    ID3D12DescriptorHeap* heaps[] = {
-    m_resourceDescriptors->Heap(), m_states->Heap()
-    };
-    commandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)),
-        heaps);
-
-    m_roomEffect->SetMatrices(DirectX::SimpleMath::Matrix::Identity, m_view, m_proj);
-    m_roomEffect->SetDiffuseColor(m_roomColor);
-    m_roomEffect->Apply(commandList);
-    m_room->Draw(commandList);
-
     pSceneManager->Render();
 
     PIXEndEvent(commandList);
@@ -193,27 +134,7 @@ void Renderer::Initialize(HWND window, int width, int height)
 
 void Renderer::Update(float /*elapsedTime*/)
 {
-    constexpr float limit{ DirectX::XM_PIDIV2 - 0.01f };
-    m_pitch = std::max(-limit, m_pitch);
-    m_pitch = std::min(+limit, m_pitch);
 
-    if(m_yaw > DirectX::XM_PI)
-    {
-        m_yaw -= DirectX::XM_2PI;
-    }
-    else if(m_yaw < -DirectX::XM_PI)
-    {
-        m_yaw += DirectX::XM_2PI;
-    }
-
-    const float y { sinf(m_pitch)};
-    const float r { cosf(m_pitch)};
-    const float z { r * cosf(m_yaw)};
-    const float x{ r * sinf(m_yaw) };
-
-   const DirectX::XMVECTOR lookAt = m_cameraPos + DirectX::SimpleMath::Vector3(x, y, z);
-
-    m_view = XMMatrixLookAtRH(m_cameraPos, lookAt, DirectX::SimpleMath::Vector3::Up);
 }
 
 // Helper method to clear the back buffers.
