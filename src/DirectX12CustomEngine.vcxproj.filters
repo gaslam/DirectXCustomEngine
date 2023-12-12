@@ -24,6 +24,7 @@
     <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\CameraFixed.h" />
     <ClInclude Include="Components\MeshRenderComponent.h" />
+    <ClInclude Include="Components\TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Components\CameraFixed.cpp" />
     <ClCompile Include="SceneClasses\GameObject.cpp" />
     <ClCompile Include="Components\MeshRenderComponent.cpp" />
+    <ClCompile Include="Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

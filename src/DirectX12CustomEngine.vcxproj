@@ -225,6 +225,7 @@
     <ClInclude Include="Managers\SceneManager.h" />
     <ClInclude Include="SceneUtils.h" />
     <ClInclude Include="Scenes\TestScene.h" />
+    <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Utils\StepTimer.h" />
     <ClInclude Include="Core\DeviceResources.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="SceneClasses\GameObject.cpp" />
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="Scenes\TestScene.cpp" />
+    <ClCompile Include="Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
