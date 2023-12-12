@@ -26,7 +26,7 @@ namespace Engine
 		virtual void OnSceneActivated() {};
 		void RootOnDeviceLost();
 		virtual void OnDeviceLost() {};
-		std::wstring GetName() const { return m_Name; }
+		[[nodiscard]]std::wstring GetName() const { return m_Name; }
 		[[nodiscard]] SceneContext GetSceneContext() const { return m_SceneContext; }
 
 	protected:
@@ -36,7 +36,7 @@ namespace Engine
 		virtual void Update(const SceneContext&){};
 
 		GameObject* AddChild(GameObject* object);
-		void RemoveChild(GameObject* object);
+		std::unique_ptr<GameObject> RemoveChild(GameObject* object, bool keepActive = false);
 	private:
 		const std::wstring m_Name{};
 

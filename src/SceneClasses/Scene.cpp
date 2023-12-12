@@ -84,7 +84,7 @@ GameObject* Scene::AddChild(GameObject* object)
 
 }
 
-void Scene::RemoveChild(GameObject* object)
+std::unique_ptr<GameObject> Scene::RemoveChild(GameObject* object, bool keepActive)
 {
 	const auto it{ std::ranges::find_if(m_pChildren.begin(),m_pChildren.end(),[object](const std::unique_ptr<GameObject>& other)
 	{
@@ -97,7 +97,18 @@ void Scene::RemoveChild(GameObject* object)
 
 	if(it == m_pChildren.end())
 	{
-		return;
+		return nullptr;
 	}
+
+	std::unique_ptr<GameObject> newObject{ nullptr };
+
+	if(keepActive)
+	{
+		newObject = std::move(*it);
+		;
+	}
+
 	m_pChildren.erase(it);
+
+	return std::move(newObject);
 }
