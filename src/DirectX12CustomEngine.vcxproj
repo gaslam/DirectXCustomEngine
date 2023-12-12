@@ -206,6 +206,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Prefabs\FreeMoveCamera.h" />
     <ClInclude Include="Prefabs\CameraFixed.h" />
     <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Command\Command.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Prefabs\FreeMoveCamera.cpp" />
     <ClCompile Include="Prefabs\CameraFixed.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Core\Game.cpp" />

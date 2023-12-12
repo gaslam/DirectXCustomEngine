@@ -25,6 +25,7 @@
     <ClInclude Include="Prefabs\CameraFixed.h" />
     <ClInclude Include="Components\MeshRenderComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
+    <ClInclude Include="Prefabs\FreeMoveCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="SceneClasses\GameObject.cpp" />
     <ClCompile Include="Components\MeshRenderComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
+    <ClCompile Include="Prefabs\FreeMoveCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
