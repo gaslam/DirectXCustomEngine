@@ -106,6 +106,8 @@ void Game::OnWindowSizeChanged(const int width, const int height)
 {
     m_Context.windowHeight = height;
     m_Context.windowWidth = width;
+    const auto sceneManager{ SceneManager::GetInstance() };
+    sceneManager->OnScreensizeChanged(width, height);
 }
 
 void Game::OnResuming()

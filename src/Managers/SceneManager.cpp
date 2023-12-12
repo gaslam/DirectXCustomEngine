@@ -121,3 +121,11 @@ void SceneManager::OnDeviceLost()
 		m_pActiveScene->RootOnDeviceLost();
 	}
 }
+
+void SceneManager::OnScreensizeChanged(const int width, const int height)
+{
+	if (m_pActiveScene)
+	{
+		m_pActiveScene->RootOnScreensizeChanged(width,height);
+	}
+}

@@ -10,6 +10,7 @@ namespace Engine
 	public:
 		BaseComponent() = default;
 		virtual ~BaseComponent() = default;
+		virtual void OnScreensizeChanged(const int, const int){};
 
 		BaseComponent(const BaseComponent& other) = delete;
 		BaseComponent(BaseComponent&& other) noexcept = delete;

@@ -34,6 +34,7 @@ namespace Engine
 		void GoToNextScene();
 		void GoToPreviousScene();
 		void OnDeviceLost();
+		void OnScreensizeChanged(const int width, const int height);
 	private:
 		std::vector<std::unique_ptr<Scene>> m_pScenes{};
 		Scene* m_pActiveScene{};

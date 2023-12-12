@@ -13,6 +13,7 @@ namespace Engine
 		}
 
 		virtual ~Scene() = default;
+		void RootOnScreensizeChanged(const int width, const int height);
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) noexcept = delete;
 		bool operator==(Scene& other) = delete;

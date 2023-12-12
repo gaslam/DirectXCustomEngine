@@ -6,6 +6,14 @@
 
 using namespace Engine;
 
+void Scene::RootOnScreensizeChanged(const int width, const int height)
+{
+	for (const auto& child : m_pChildren)
+	{
+		child->RootOnScreensizeChanged(width, height);
+	}
+}
+
 void Scene::RootRender()
 {
 	Render();
@@ -27,6 +35,7 @@ void Scene::RootInitialize(GameContext& gameContext)
 	m_SceneContext.d12Context = gameContext.d12Context;
 	m_SceneContext.windowHeight = gameContext.windowHeight;
 	m_SceneContext.windowWidth = gameContext.windowWidth;
+	m_SceneContext.timer = gameContext.timer;
 
 	CameraFixed* pCamera{ new CameraFixed{} };
 	AddChild(pCamera);
