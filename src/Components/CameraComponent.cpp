@@ -6,6 +6,15 @@
 
 using namespace Engine;
 
+void CameraComponent::RotateCamera(Vector3 rot, bool isDegrees)
+{
+	m_Pitch += rot.x;
+	m_Yaw += rot.z;
+	m_Roll -= rot.y;
+
+	m_Transform->Rotate(m_Roll, m_Pitch, m_Yaw,isDegrees);
+}
+
 void CameraComponent::Update(const SceneContext& context)
 {
 	if(m_MarkedForScreenUpdate)
@@ -19,13 +28,7 @@ void CameraComponent::Update(const SceneContext& context)
 		return;
 	}
 
-	//const float elapsedTime{ static_cast<float>(context.timer->GetElapsedSeconds()) };
-
-//	m_Pitch += elapsedTime * 10.f;
-
 	const Vector3 camPos{ m_Transform->GetWorldPosition() };
-	m_Transform->Translate(camPos);
-	m_Transform->Rotate(m_Roll,m_Pitch,m_Yaw);
 
 	const Vector3 lookAt{ camPos + m_Transform->GetForward() };
 	m_View = XMMatrixLookAtRH(camPos, lookAt, Vector3::Up);
@@ -54,6 +57,16 @@ void CameraComponent::Initialize(const SceneContext&)
 
 	m_Transform = owner->GetTransform();
 	m_Transform->Translate(startPos);
+	m_CurrentPos = startPos;
+}
+
+void CameraComponent::MoveCamera(const Vector3 pos)
+{
+	if(m_Transform)
+	{
+		m_CurrentPos += pos;
+		m_Transform->Translate(m_CurrentPos);
+	}
 }
 
 void CameraComponent::SetFOV(float fov)

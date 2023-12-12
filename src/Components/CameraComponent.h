@@ -13,6 +13,7 @@ namespace Engine
     public:
         CameraComponent() = default;
         ~CameraComponent() override = default;
+        void RotateCamera(Vector3 rot,bool isDegrees = false);
 
         CameraComponent(const CameraComponent& other) = delete;
         CameraComponent(CameraComponent&& other)noexcept = delete;
@@ -22,10 +23,21 @@ namespace Engine
         void Update(const SceneContext& context) override;
         void ChangeProjection(const SceneContext& context);
         void Initialize(const SceneContext& context) override;
+        void MoveCamera(Vector3 pos);
         [[nodiscard]]Matrix GetProjectionMatrix() const { return m_Proj; }
         [[nodiscard]]Matrix GetViewMatrix() const { return m_View; }
+        [[nodiscard]]TransformComponent* GetTransform() const { return m_Transform; }
         void SetFOV(float fov);
     private:
+
+        float m_Pitch{};
+        float m_Roll{};
+        float m_Yaw{};
+        float m_FOV{ 70.f };
+        bool m_MarkedForScreenUpdate{ true };
+
+        Vector3 m_CurrentPos{};
+        
         Matrix m_View{};
         Matrix m_ViewInverse{};
         Matrix m_Proj{};
@@ -33,12 +45,7 @@ namespace Engine
         Matrix m_ViewProj{};
         Matrix m_ViewProjInverse{};
 
-        float m_Pitch{};
-        float m_Roll{};
-        float m_Yaw{};
-        float m_FOV{ 70.f };
-        bool m_MarkedForScreenUpdate{true};
-        TransformComponent* m_Transform;
+        TransformComponent* m_Transform{};
 
         void OnScreensizeChanged(const int, const int) override;
     };
