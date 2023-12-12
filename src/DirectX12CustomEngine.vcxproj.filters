@@ -22,7 +22,7 @@
     <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Structs\Contexts.h" />
     <ClInclude Include="Components\CameraComponent.h" />
-    <ClInclude Include="Components\CameraFixed.h" />
+    <ClInclude Include="Prefabs\CameraFixed.h" />
     <ClInclude Include="Components\MeshRenderComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Managers\InputManager.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
-    <ClCompile Include="Components\CameraFixed.cpp" />
+    <ClCompile Include="Prefabs\CameraFixed.cpp" />
     <ClCompile Include="SceneClasses\GameObject.cpp" />
     <ClCompile Include="Components\MeshRenderComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Scene.h"
 
-#include "Components/CameraFixed.h"
+#include "Prefabs/CameraFixed.h"
 #include "Components/CameraComponent.h"
 
 using namespace Engine;
