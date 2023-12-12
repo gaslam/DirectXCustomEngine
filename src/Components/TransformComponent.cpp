@@ -36,7 +36,7 @@ Vector3 TransformComponent::GetBackwards()
 
 void TransformComponent::Translate(const Vector3& translation)
 {
-	m_LocalPosition = translation;
+	m_LocalPosition =  translation;
 	m_TransformChanged |= ChangedTransform::Translate;
 }
 
@@ -136,7 +136,7 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	
 	const auto rotMat = XMMatrixRotationQuaternion(m_WorldRotation);
 	m_Forward = XMVector3TransformCoord(XMVectorSet(0.f,0.f,1.f,0.f), rotMat);
-	m_Right = XMVector3TransformCoord(XMVectorSet(1.f,0.f,0.f,0.f), rotMat);
+	m_Right = XMVector3TransformCoord(XMVectorSet(-1.f,0.f,0.f,0.f), rotMat);
 	m_Up = XMVector3Cross(m_Forward, m_Right);
 }
 
