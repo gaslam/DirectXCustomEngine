@@ -18,8 +18,9 @@ namespace Engine
 		explicit InputManager();
 		void ProcessControllerInput(float deltaTime);
 		void BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Command* command);
-		void BindButtonsToInput(unsigned int id, XboxControllerButton& button, Keyboard::Keys& keyboardKey, const wstring& input);
+		void BindButtonsToInput(unsigned int id, const std::wstring& input, Keyboard::Keys& keyboardKey, XboxControllerButton button = NONE);
 		void Update();
+		[[nodiscard]] SimpleMath::Vector2 GetJoystickCoords(XboxJoystick joystick, unsigned int controllerId);
 		[[nodiscard]] GamePad* GetGamePad() const { return m_pGamepad.get(); }
 		bool IsPressed(const wstring& input);
 		bool IsUp(const wstring& input);
@@ -28,9 +29,43 @@ namespace Engine
 		void Resume() const;
 		void Suspend() const;
 
-		[[nodiscard]] Mouse::State GetMouseState() const { return m_pMouse->GetState(); }
+		[[nodiscard]] Mouse::State GetMouseState() const { return m_pMouseHandler->GetState(); }
+		[[nodiscard]] SimpleMath::Vector2 GetMouseDelta() const { return m_pMouseHandler->GetDelta(); }
 
 	private:
+
+		class MouseHandler final
+		{
+		public:
+			explicit MouseHandler(Mouse* mouse) : m_pMouse(std::unique_ptr<Mouse>(mouse))
+			{
+
+			}
+
+			void UpdateDelta()
+			{
+				const auto mouseState(m_pMouse->GetState());
+				if (mouseState.positionMode == Mouse::MODE_RELATIVE)
+				{
+					m_CurrentPos = SimpleMath::Vector2{ static_cast<float>(mouseState.x),static_cast<float>(mouseState.y) };
+					if(m_CurrentPos.LengthSquared() == 0.0f)
+					{
+						m_CurrentPos = m_PreviousPos;
+					}
+					m_Delta = m_CurrentPos - m_PreviousPos;
+
+					m_CurrentPos = m_PreviousPos;
+				}
+			}
+
+			[[nodiscard]] Mouse::State GetState() const { return m_pMouse->GetState(); };
+			[[nodiscard]] SimpleMath::Vector2 GetDelta() const { return m_Delta; };
+		private:
+			unique_ptr<Mouse> m_pMouse{};
+			SimpleMath::Vector2 m_Delta{};
+			SimpleMath::Vector2 m_PreviousPos{}, m_CurrentPos{};
+		};
+
 		using CommandsMap = map<KeyInput, unique_ptr<Command>>;
 		using InputMap = map<wstring, KeyInput>;
 
@@ -39,7 +74,7 @@ namespace Engine
 		Keyboard::KeyboardStateTracker m_keyboardState;
 		unique_ptr<GamePad> m_pGamepad{};
 		unique_ptr<Keyboard> m_pKeyboard{};
-		unique_ptr<Mouse> m_pMouse{};
+		unique_ptr<MouseHandler> m_pMouseHandler{};
 
 		CommandsMap m_Commands{};
 		InputMap m_Inputs{};

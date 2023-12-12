@@ -10,11 +10,12 @@ using namespace Engine;
 InputManager::InputManager()
 {
 	m_pGamepad = std::make_unique<GamePad>();
-	m_pMouse = std::make_unique<Mouse>();
-	m_pKeyboard = std::make_unique<Keyboard>();
-
+	const auto pMouse{ new Mouse{}};
 	const HWND hWnd{ GetActiveWindow() };
-	m_pMouse->SetWindow(hWnd);
+	pMouse->SetWindow(hWnd);
+	pMouse->SetMode(Mouse::MODE_RELATIVE);
+	m_pMouseHandler = std::make_unique<MouseHandler>(pMouse);
+	m_pKeyboard = std::make_unique<Keyboard>();
 }
 
 void InputManager::ProcessControllerInput(float /*deltaTime*/)
@@ -49,7 +50,7 @@ void InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& b
 	m_Commands.insert({ input,std::unique_ptr<Command>(command) });
 }
 
-void InputManager::BindButtonsToInput(unsigned int id, XboxControllerButton& button,Keyboard::Keys& keyboardKey, const std::wstring& input)
+void InputManager::BindButtonsToInput(unsigned int id, const std::wstring& input, Keyboard::Keys& keyboardKey, XboxControllerButton button)
 {
 	KeyInput keyInput{};
 	keyInput.id = static_cast<int>(m_Commands.size());
@@ -77,6 +78,22 @@ void InputManager::Update()
 	}
 	const auto pKeyState{ m_pKeyboard->GetState() };
 	m_keyboardState.Update(pKeyState);
+	m_pMouseHandler->UpdateDelta();
+}
+
+SimpleMath::Vector2 InputManager::GetJoystickCoords(XboxJoystick joystick, unsigned int controllerId)
+{
+	if(!m_pGamepad)
+	{
+		Logger::LogWarning(L"Cannot get joystick coords");
+		return {};
+	}
+
+	SimpleMath::Vector2 dir{};
+	const auto state{ m_pGamepad->GetState(controllerId) };
+	dir.x = joystick == XboxJoystick::LEFT ? state.thumbSticks.leftX : state.thumbSticks.rightX;
+	dir.y = joystick == XboxJoystick::LEFT ? state.thumbSticks.leftY : state.thumbSticks.rightY;
+	return dir;
 }
 
 GamePad::ButtonStateTracker::ButtonState InputManager::GetButtonState(const XboxControllerButton& button) const
