@@ -3,8 +3,10 @@
 #include <unordered_map>
 #include <memory>
 #include <ranges>
+#include <vector>
 
 #include "../Components/BaseComponent.h"
+#include "../Components/TransformComponent.h"
 
 using namespace std;
 namespace Engine
@@ -51,7 +53,7 @@ namespace Engine
 			}
 			const type_index typeIndex { type_index(typeid(T))};
 			auto pComponent{ make_unique<T>(forward<Args>(args)...) };
-			pComponent->SetOwner(nullptr);
+			pComponent->SetOwner(this);
 			pComponent->OnOwnerAttach(this);
 			auto pointer{ pComponent.get()};
 			m_pComponents.emplace(typeIndex, move(pComponent));
@@ -73,17 +75,21 @@ namespace Engine
 
 		void RemoveChild(GameObject* child)
 		{
-			const auto foundObject = find(m_pChildren.begin(), m_pChildren.end(), child);
+			const auto foundObject = std::ranges::find_if(m_pChildren.begin(), m_pChildren.end(),[child](const std::unique_ptr<GameObject>& obj)
+			{
+					return obj.get() == child;
+			});
 			if (foundObject != m_pChildren.end())
 			{
 				m_pChildren.erase(foundObject);
 			}
 		}
 
-		void AddChild(GameObject* child)
+		GameObject* AddChild(GameObject* child)
 		{
 			child->RootSceneAttach(m_pParentScene);
 			m_pChildren.emplace_back(child);
+			return child;
 		}
 
 		void Update(const SceneContext& context) const
@@ -135,10 +141,16 @@ namespace Engine
 		}
 
 		Scene* GetParentScene() const { return m_pParentScene; }
+		GameObject* GetParent() const { return m_pParent; }
+		TransformComponent* GetTransform() const { return m_pTransform; }
 
 	protected:
 		void RootInitialize(const SceneContext& sceneContext)
 		{
+			GameObject* obj{ AddChild(new GameObject{}) };
+
+			m_pTransform = obj->AddComponent<TransformComponent>();
+
 			Initialize(sceneContext);
 			for(const auto& pComponent: m_pComponents| views::values)
 			{
@@ -148,13 +160,32 @@ namespace Engine
 
 		virtual void Initialize(const SceneContext&) {};
 
+		virtual void RootOnScreensizeChanged(const int width, const int height)
+		{
+			OnScreensizeChanged(width,height);
+			for (const auto& pComponent : m_pComponents | views::values)
+			{
+				pComponent->OnScreensizeChanged(width,height);
+			}
+
+			for (const auto& pChild : m_pChildren)
+			{
+				pChild->OnScreensizeChanged(width, height);
+			}
+		};
+		virtual void OnScreensizeChanged(const int, const int)
+		{
+			
+		}
+
 	private:
 		friend class Scene;
 		void RootSceneAttach(Scene* pScene);
 		GameObject* m_pParent{};
 		Scene* m_pParentScene{};
 
-		vector<GameObject*> m_pChildren{};
+		vector<std::unique_ptr<GameObject>> m_pChildren{};
 		unordered_map<type_index, unique_ptr<BaseComponent>> m_pComponents{};
+		TransformComponent* m_pTransform{};
 	};
 }

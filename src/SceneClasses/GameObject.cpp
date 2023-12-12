@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 
-void Engine::GameObject::RootSceneAttach(Scene* pScene)
+void GameObject::RootSceneAttach(Scene* pScene)
 {
 	if(!pScene)
 	{
