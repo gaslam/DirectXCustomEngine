@@ -3,6 +3,7 @@
 
 #include "Prefabs/CameraFixed.h"
 #include "Components/CameraComponent.h"
+#include "Prefabs/FreeMoveCamera.h"
 
 using namespace Engine;
 
@@ -37,7 +38,7 @@ void Scene::RootInitialize(GameContext& gameContext)
 	m_SceneContext.windowWidth = gameContext.windowWidth;
 	m_SceneContext.timer = gameContext.timer;
 
-	CameraFixed* pCamera{ new CameraFixed{} };
+	FreeMoveCamera* pCamera{ new FreeMoveCamera{} };
 	AddChild(pCamera);
 
 	//Code to be added
@@ -56,7 +57,7 @@ void Scene::RootUpdate()
 
 	for(const auto& child: m_pChildren)
 	{
-		child->Update(m_SceneContext);
+		child->RootUpdate(m_SceneContext);
 	}
 }
 
