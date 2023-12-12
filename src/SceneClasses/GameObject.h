@@ -92,18 +92,6 @@ namespace Engine
 			return child;
 		}
 
-		void Update(const SceneContext& context) const
-		{
-			for(const auto& val : m_pComponents | views::values)
-			{
-				val->Update(context);
-			}
-			for(const auto& pChild: m_pChildren)
-			{
-				pChild->Update(context);
-			}
-		}
-
 		void OnDeviceLost() const
 		{
 			for (const auto& val : m_pComponents | views::values)
@@ -173,6 +161,26 @@ namespace Engine
 				pChild->OnScreensizeChanged(width, height);
 			}
 		};
+
+		void RootUpdate(const SceneContext& context)
+		{
+			for (const auto& val : m_pComponents | views::values)
+			{
+				val->Update(context);
+			}
+			for (const auto& pChild : m_pChildren)
+			{
+				pChild->Update(context);
+			}
+
+			Update(context);
+		}
+
+		virtual void Update(const SceneContext&)
+		{
+
+		}
+
 		virtual void OnScreensizeChanged(const int, const int)
 		{
 			
