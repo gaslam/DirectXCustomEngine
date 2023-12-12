@@ -4,6 +4,7 @@ using namespace DirectX;
 
 enum XboxControllerButton
 {
+	NONE,
 	A,
 	B,
 	X,
@@ -26,6 +27,12 @@ enum XboxControllerButton
 	RSTICKRIGHT,
 	LTRIGGER,
 	RTRIGGER
+};
+
+enum XboxJoystick
+{
+	LEFT,
+	RIGHT
 };
 
 struct KeyInput {
