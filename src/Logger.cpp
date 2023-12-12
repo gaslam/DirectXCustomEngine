@@ -56,6 +56,10 @@ void Logger::LogInfo(const InfoLog& info)
 
 void Logger::HandleLog(LogLevel type, const InfoLog& info)
 {
+#if defined(_DEBUG) || defined(DEBUG)
+	return;
+#endif
+
 	CONSOLE_SCREEN_BUFFER_INFO   csbi;
 	GetConsoleScreenBufferInfo(m_pConsoleHandle,&csbi);
 	const WORD currentAttributeConsole{ csbi.wAttributes };
