@@ -35,7 +35,7 @@ namespace Engine
 	private:
 		GameObject* m_pOwner{};
 	protected:
-		GameObject* GetOwner() const { return m_pOwner; }
+		[[nodiscard]]GameObject* GetOwner() const { return m_pOwner; }
 
 	};
 }

@@ -21,7 +21,7 @@ public:
 	void OnWindowSizeChanged(int width, int height);
 	void Render() const;
 	void Initialize(HWND window, int width, int height);
-	DX::DeviceResources* GetDeviceResources() const { return  m_deviceResources.get(); }
+	[[nodiscard]]DX::DeviceResources* GetDeviceResources() const { return  m_deviceResources.get(); }
 
 	//to be removed
 	void Update(float elapsedTime);

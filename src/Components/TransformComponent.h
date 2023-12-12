@@ -44,14 +44,14 @@ public:
 	void Rotate(float roll = 0.f, float pitch = 0.f, float yaw = 0.f, bool isInDegrees = false);
 	void Rotate(const Vector3& rotation, bool isInDegrees = false);
 	void SetScale(float scale = 1.f);
-	float GetWorldScale() const { return m_WorldScale; }
+	[[nodiscard]]float GetWorldScale() const { return m_WorldScale; }
 
-	Vector3 GetWorldPosition();
-	Vector3 GetForward();
-	Vector4 GetWorldRotation();
-	Vector3 GetBackwards();
-	Vector3 GetRight();
-	Vector3 GetLeft();
+	[[nodiscard]]Vector3 GetWorldPosition();
+	[[nodiscard]]Vector3 GetForward();
+	[[nodiscard]]Vector4 GetWorldRotation();
+	[[nodiscard]]Vector3 GetBackwards();
+	[[nodiscard]]Vector3 GetRight();
+	[[nodiscard]]Vector3 GetLeft();
 private:
 
 	Vector3 m_WorldPosition{};

@@ -140,9 +140,9 @@ namespace Engine
 			}
 		}
 
-		Scene* GetParentScene() const { return m_pParentScene; }
-		GameObject* GetParent() const { return m_pParent; }
-		TransformComponent* GetTransform() const { return m_pTransform; }
+		[[nodiscard]]Scene* GetParentScene() const { return m_pParentScene; }
+		[[nodiscard]]GameObject* GetParent() const { return m_pParent; }
+		[[nodiscard]]TransformComponent* GetTransform() const { return m_pTransform; }
 
 	protected:
 		void RootInitialize(const SceneContext& sceneContext)

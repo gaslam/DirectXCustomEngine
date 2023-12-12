@@ -40,7 +40,7 @@ public:
 
     // Properties
     void GetDefaultSize( int& width, int& height ) const noexcept;
-    Renderer* GetRenderer() const { return m_pRenderer.get(); }
+    [[nodiscard]]Renderer* GetRenderer() const { return m_pRenderer.get(); }
 
 private:
 

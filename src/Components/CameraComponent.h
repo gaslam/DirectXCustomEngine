@@ -22,8 +22,8 @@ namespace Engine
         void Update(const SceneContext& context) override;
         void ChangeProjection(const SceneContext& context);
         void Initialize(const SceneContext& context) override;
-        Matrix GetProjectionMatrix() const { return m_Proj; }
-        Matrix GetViewMatrix() const { return m_View; }
+        [[nodiscard]]Matrix GetProjectionMatrix() const { return m_Proj; }
+        [[nodiscard]]Matrix GetViewMatrix() const { return m_View; }
         void SetFOV(float fov);
     private:
         Matrix m_View{};
