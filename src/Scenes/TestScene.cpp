@@ -3,22 +3,34 @@
 
 #include "Components/MeshRenderComponent.h"
 #include "Managers/InputManager.h"
+#include "Prefabs/Shapes/Circle.h"
 
 using namespace Engine;
 
 void TestScene::Initialize()
 {
-	GameObject* room{ AddChild(new GameObject{}) };
-	room->AddComponent<MeshRenderComponent>();
+	const float radius{ 10.f };
+	m_Circle = AddChild(new Circle{radius});
 
 
 }
 
-void TestScene::Update(const SceneContext&)
+void TestScene::Update(const SceneContext& context)
 {
-	const auto inputManager{ InputManager::GetInstance() };
-	if(inputManager->IsReleased(L"test"))
+	const float elapsedSec{ static_cast<float>(context.timer->GetElapsedSeconds()) };
+	float radius = m_Circle->GetDiameter();
+	if(radius >= m_MaxScale)
 	{
-		Logger::LogInfo(L"test is a valid input");
+		radius = m_MaxScale;
+		m_ScaleSpeed = -m_ScaleSpeed;
 	}
+
+	if (radius <= m_MinScale)
+	{
+		radius = m_MinScale;
+		m_ScaleSpeed = -m_ScaleSpeed;
+	}
+
+	radius += elapsedSec * m_ScaleSpeed;
+	m_Circle->SetDiameter(radius);
 }

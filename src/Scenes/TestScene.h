@@ -1,6 +1,8 @@
 #pragma once
 #include "SceneClasses/Scene.h"
 
+class Circle;
+
 namespace Engine
 {
 	class TestScene :
@@ -14,16 +16,13 @@ namespace Engine
 		void Initialize() override;
 		void Render() override {};
 		void PostRender() override {};
-		void Update(const SceneContext& /*context*/) override;
+		void Update(const SceneContext& context) override;
 	private:
-		std::unique_ptr<DirectX::GeometricPrimitive> m_room;
+		Circle* m_Circle{};
 
-		DirectX::SimpleMath::Color m_roomColor;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> m_roomTex;
-		std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
-		std::unique_ptr<DirectX::CommonStates> m_states;
-		std::unique_ptr<DirectX::BasicEffect> m_roomEffect;
+		float m_MinScale{ 1 };
+		float m_ScaleSpeed{ 1.f };
+		float m_MaxScale{ 5 };
 	};
 }
 
