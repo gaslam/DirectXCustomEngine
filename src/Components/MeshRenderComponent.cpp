@@ -2,20 +2,27 @@
 #include "MeshRenderComponent.h"
 
 #include "CameraComponent.h"
+#include "SceneClasses/GameObject.h"
 
 using namespace DirectX;
 
 void MeshRenderComponent::Initialize(const SceneContext& context)
 {
+
+    GameObject* owner{ GetOwner() };
+
+    m_pTransform = owner->GetTransform();
+    if(!m_pTransform)
+    {
+        Logger::LogWarning(L"Cannot translate the object cause no transform was found");
+        return;
+    }
+
     DX::DeviceResources* pDeviceResources{ context.d12Context.pDeviceResources };
     ID3D12Device* pDevice{ pDeviceResources->GetD3DDevice() };
     m_resourceDescriptors = std::make_unique<DescriptorHeap>(pDevice, 1);
 
     m_states = std::make_unique<CommonStates>(pDevice);
-
-    m_room = GeometricPrimitive::CreateBox(
-        XMFLOAT3(ROOM_BOUNDS[0], ROOM_BOUNDS[1], ROOM_BOUNDS[2]),
-        false, true);
 
     RenderTargetState rtState(pDeviceResources->GetBackBufferFormat(),
         pDeviceResources->GetDepthBufferFormat());
@@ -25,47 +32,32 @@ void MeshRenderComponent::Initialize(const SceneContext& context)
             &GeometricPrimitive::VertexType::InputLayout,
             CommonStates::Opaque,
             CommonStates::DepthDefault,
-            CommonStates::CullCounterClockwise,
+            CommonStates::CullClockwise,
             rtState);
 
-        m_roomEffect = std::make_unique<BasicEffect>(pDevice,
-            EffectFlags::Lighting | EffectFlags::Texture, pd);
-        m_roomEffect->EnableDefaultLighting();
+        m_Effect = std::make_unique<BasicEffect>(pDevice,
+            EffectFlags::Lighting, pd);
+        m_Effect->EnableDefaultLighting();
     }
 
     ResourceUploadBatch resourceUpload(pDevice);
 
     resourceUpload.Begin();
 
-    const std::wstring fileLocation{ L"./Resources/roomtexture.dds" };
-    const HRESULT result = CreateDDSTextureFromFile(pDevice, resourceUpload, fileLocation.c_str()
-        ,
-        m_roomTex.ReleaseAndGetAddressOf());
-
-    if(FAILED(result))
-    {
-        std::wstring error{ L"Cannot create texture from file location: " + fileLocation };
-        Logger::LogError(error);
-        return;
-    }
-
-    CreateShaderResourceView(pDevice, m_roomTex.Get(),
-        m_resourceDescriptors->GetFirstCpuHandle());
-
-    m_roomEffect->SetTexture(m_resourceDescriptors->GetFirstGpuHandle(),
-        m_states->LinearClamp());
-
     const future<void> uploadResourcesFinished{ resourceUpload.End(
         pDeviceResources->GetCommandQueue()) };
     uploadResourcesFinished.wait();
 
     pDeviceResources->WaitForGpu();
-
-    m_RoomColor = Colors::White;
 }
 
 void MeshRenderComponent::Render(const SceneContext& context)
 {
+
+    if(!m_pTransform)
+    {
+        return;
+    }
     const auto pCamera{ context.pCameraComp };
     const Matrix view{ pCamera->GetViewMatrix() };
     const Matrix proj{ pCamera->GetProjectionMatrix() };
@@ -76,17 +68,22 @@ void MeshRenderComponent::Render(const SceneContext& context)
     commandList->SetDescriptorHeaps(std::size(heaps),
         heaps);
 
-    m_roomEffect->SetMatrices(Matrix::Identity, view, proj);
-    m_roomEffect->SetDiffuseColor(m_RoomColor);
-    m_roomEffect->Apply(commandList);
-    m_room->Draw(commandList);
+    const auto world{ m_pTransform->GetWorldMatrix() };
+    m_Effect->SetMatrices(world, view, proj);
+    m_Effect->Apply(commandList);
+    m_Shape->Draw(commandList);
 }
 
 void MeshRenderComponent::OnDeviceLost()
 {
-    m_room.reset();
+    m_Shape.reset();
     m_roomTex.Reset();
     m_resourceDescriptors.reset();
     m_states.reset();
-    m_roomEffect.reset();
+    m_Effect.reset();
+}
+
+void MeshRenderComponent::SetShape(std::unique_ptr<GeometricPrimitive>& shape)
+{
+    m_Shape = std::move(shape);
 }
