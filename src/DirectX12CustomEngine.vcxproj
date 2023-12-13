@@ -206,6 +206,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Prefabs\Shapes\Circle.h" />
     <ClInclude Include="Prefabs\FreeMoveCamera.h" />
     <ClInclude Include="Prefabs\CameraFixed.h" />
     <ClInclude Include="Components\CameraComponent.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Components\MeshRenderComponent.h" />
+    <ClInclude Include="Prefabs\Shapes\Shape.h" />
     <ClInclude Include="Structs\Contexts.h" />
     <ClInclude Include="Structs\KeyStructs.h" />
     <ClInclude Include="Managers\InputManager.h" />
@@ -232,6 +234,7 @@
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Prefabs\Shapes\Circle.cpp" />
     <ClCompile Include="Prefabs\FreeMoveCamera.cpp" />
     <ClCompile Include="Prefabs\CameraFixed.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
@@ -253,6 +256,7 @@
     <ClCompile Include="SceneClasses\Scene.cpp" />
     <ClCompile Include="Scenes\TestScene.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
+    <ClCompile Include="Prefabs\Shapes\Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -26,6 +26,8 @@
     <ClInclude Include="Components\MeshRenderComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Prefabs\FreeMoveCamera.h" />
+    <ClInclude Include="Prefabs\Shapes\Shape.h" />
+    <ClInclude Include="Prefabs\Shapes\Circle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -44,6 +46,8 @@
     <ClCompile Include="Components\MeshRenderComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
     <ClCompile Include="Prefabs\FreeMoveCamera.cpp" />
+    <ClCompile Include="Prefabs\Shapes\Shape.cpp" />
+    <ClCompile Include="Prefabs\Shapes\Circle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
