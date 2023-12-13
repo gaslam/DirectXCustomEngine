@@ -8,10 +8,10 @@ using namespace SimpleMath;
 
 enum class ChangedTransform
 {
-	None = 0x00,
-	Translate = 0x01,
-	Rotate = 0x02,
-	Scale = 0x04,
+	Translate = 1 << 0,
+	Rotate = 1 << 1,
+	Scale = 1 << 2,
+	None = 1 << 3,
 };
 
 
@@ -43,8 +43,8 @@ public:
 	void Translate(float x = 0.f,float y = 0.f, float z = 0.f);
 	void Rotate(float roll = 0.f, float pitch = 0.f, float yaw = 0.f, bool isInDegrees = false);
 	void Rotate(const Vector3& rotation, bool isInDegrees = false);
-	void SetScale(float scale = 1.f);
-	[[nodiscard]]float GetWorldScale() const { return m_WorldScale; }
+	void SetScale(Vector3 scale = {1.f,1.f,1.f});
+	[[nodiscard]] Vector3 GetWorldScale();
 
 	[[nodiscard]]Vector3 GetWorldPosition();
 	[[nodiscard]]Vector3 GetForward();
@@ -52,24 +52,27 @@ public:
 	[[nodiscard]]Vector3 GetBackwards();
 	[[nodiscard]]Vector3 GetRight();
 	[[nodiscard]]Vector3 GetLeft();
+	[[nodiscard]] Matrix GetWorldMatrix() const { return m_World; }
 private:
 
 	Vector3 m_WorldPosition{};
 	Vector3 m_LocalPosition{};
+	Vector3 m_WorldScale{};
+	Vector3 m_LocalScale{};
 	Vector3 m_Forward{Vector3::Forward};
 	Vector3 m_Right{Vector3::Right};
 	Vector3 m_Up{Vector3::Up};
 	Vector4 m_WorldRotation{};
 	Vector4 m_LocalRotation{ m_WorldRotation };
 
-	ChangedTransform m_TransformChanged{};
+	Matrix m_World{Matrix::Identity};
 
-	float m_WorldScale{};
-	float m_LocalScale{};
+	ChangedTransform m_TransformChanged{};
 
 
 	void UpdateTransform();
 	void UpdateWorldPosition(const GameObject* owner);
 	void UpdateWorldScale(const GameObject* owner);
 	void UpdateWorldRotation(const GameObject* owner);
+	void ChangeWorldMatrix();
 };

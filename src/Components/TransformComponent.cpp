@@ -66,10 +66,16 @@ void TransformComponent::Rotate(const Vector3& rotation, bool isInDegrees)
 	}
 }
 
-void TransformComponent::SetScale(float scale)
+void TransformComponent::SetScale(Vector3 scale)
 {
 	m_TransformChanged |= ChangedTransform::Scale;
 	m_LocalScale = scale;
+}
+
+Vector3 TransformComponent::GetWorldScale()
+{
+	UpdateTransform();
+	return  m_WorldScale;
 }
 
 Vector3 TransformComponent::GetRight()
@@ -109,10 +115,11 @@ void TransformComponent::UpdateTransform()
 		UpdateWorldRotation(owner);
 	}
 
-	if (m_TransformChanged & ChangedTransform::Scale)
+	if(m_TransformChanged & ChangedTransform::Scale)
 	{
-		UpdateWorldScale(owner);
+		UpdateWorldScale(owner);		
 	}
+
 
 	m_TransformChanged = ChangedTransform::None;
 }
@@ -140,6 +147,12 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	m_Up = XMVector3Cross(m_Forward, m_Right);
 }
 
+void TransformComponent::ChangeWorldMatrix()
+{
+	m_World = XMMatrixScaling(m_WorldScale.x, m_WorldScale.y, m_WorldScale.z) *
+		XMMatrixRotationQuaternion(m_WorldRotation) * XMMatrixTranslation(m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z);
+}
+
 void TransformComponent::UpdateWorldPosition(const GameObject* owner)
 {
 
@@ -156,6 +169,7 @@ void TransformComponent::UpdateWorldPosition(const GameObject* owner)
 			m_WorldPosition = transform->GetWorldPosition() + m_LocalPosition;
 		}
 	}
+	ChangeWorldMatrix();
 }
 
 void TransformComponent::UpdateWorldScale(const GameObject* owner)
@@ -174,4 +188,5 @@ void TransformComponent::UpdateWorldScale(const GameObject* owner)
 			m_WorldScale = transform->GetWorldScale() + m_WorldScale;
 		}
 	}
+	ChangeWorldMatrix();
 }
