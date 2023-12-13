@@ -77,14 +77,6 @@ void Scene::Initialize()
 	}
 }
 
-GameObject* Scene::AddChild(GameObject* object)
-{
-	object->RootSceneAttach(this);
-	m_pChildren.emplace_back(std::unique_ptr<GameObject>(object));
-	return object;
-
-}
-
 std::unique_ptr<GameObject> Scene::RemoveChild(GameObject* object, bool keepActive)
 {
 	const auto it{ std::ranges::find_if(m_pChildren.begin(),m_pChildren.end(),[object](const std::unique_ptr<GameObject>& other)

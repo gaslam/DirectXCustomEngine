@@ -35,7 +35,16 @@ namespace Engine
 		virtual void PostRender(){};
 		virtual void Update(const SceneContext&){};
 
-		GameObject* AddChild(GameObject* object);
+		template
+			<typename T>
+			enable_if_t<is_base_of_v<GameObject, T>, T*>  AddChild(T* object)
+		{
+			object->RootSceneAttach(this);
+			m_pChildren.emplace_back(std::unique_ptr<GameObject>(object));
+			return object;
+
+		}
+
 		std::unique_ptr<GameObject> RemoveChild(GameObject* object, bool keepActive = false);
 	private:
 		const std::wstring m_Name{};
