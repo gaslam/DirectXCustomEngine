@@ -35,7 +35,14 @@ namespace Engine
 	private:
 		GameObject* m_pOwner{};
 	protected:
-		[[nodiscard]]GameObject* GetOwner() const { return m_pOwner; }
+		[[nodiscard]]GameObject* GetOwner() const
+		{
+			if(!m_pOwner)
+			{
+				Logger::LogError(L"Cannot find component owner!!");
+			}
+			return m_pOwner;
+		}
 
 	};
 }
