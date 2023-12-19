@@ -17,7 +17,10 @@ namespace Engine
 	{
 	public:
 
-		GameObject() = default;
+		GameObject()
+		{
+			m_pTransform = AddComponent<TransformComponent>();
+		};
 		virtual ~GameObject() = default;
 
 		GameObject(const GameObject&) = delete;
@@ -87,6 +90,7 @@ namespace Engine
 
 		GameObject* AddChild(GameObject* child)
 		{
+			child->m_pParent = this;
 			child->RootSceneAttach(m_pParentScene);
 			m_pChildren.emplace_back(child);
 			return child;
@@ -135,14 +139,15 @@ namespace Engine
 	protected:
 		void RootInitialize(const SceneContext& sceneContext)
 		{
-			GameObject* obj{ AddChild(new GameObject{}) };
-
-			m_pTransform = obj->AddComponent<TransformComponent>();
-
 			Initialize(sceneContext);
 			for(const auto& pComponent: m_pComponents| views::values)
 			{
 				pComponent->Initialize(sceneContext);
+			}
+
+			for(const auto& pChild: m_pChildren)
+			{
+				pChild->RootInitialize(sceneContext);
 			}
 		}
 
@@ -170,7 +175,7 @@ namespace Engine
 			}
 			for (const auto& pChild : m_pChildren)
 			{
-				pChild->Update(context);
+				pChild->RootUpdate(context);
 			}
 
 			Update(context);
@@ -185,6 +190,8 @@ namespace Engine
 		{
 			
 		}
+
+		virtual void OnSceneAttach(Scene* /*pScene*/) {}
 
 	private:
 		friend class Scene;
