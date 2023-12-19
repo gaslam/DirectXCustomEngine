@@ -28,6 +28,7 @@
     <ClInclude Include="Prefabs\FreeMoveCamera.h" />
     <ClInclude Include="Prefabs\Shapes\Shape.h" />
     <ClInclude Include="Prefabs\Shapes\Circle.h" />
+    <ClInclude Include="Prefabs\Shapes\Cube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Prefabs\FreeMoveCamera.cpp" />
     <ClCompile Include="Prefabs\Shapes\Shape.cpp" />
     <ClCompile Include="Prefabs\Shapes\Circle.cpp" />
+    <ClCompile Include="Prefabs\Shapes\Cube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
