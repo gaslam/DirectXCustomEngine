@@ -27,6 +27,6 @@ struct SceneContext {
 	Engine::CameraComponent* pCameraComp{};
 	DX12Context d12Context{};
 	int windowWidth{}, windowHeight{};
-
+	std::wstring contentRoot{ L"./Resources/" };
 	DX::StepTimer* timer;
 };
