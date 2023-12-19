@@ -54,7 +54,7 @@ void Logger::LogInfo(const InfoLog& info)
 
 
 
-void Logger::HandleLog(LogLevel type, const InfoLog& info)
+void Logger::HandleLog([[maybe_unused]]LogLevel type, [[maybe_unused]]const InfoLog& info)
 {
 #if defined(_DEBUG) || defined(DEBUG)
 	CONSOLE_SCREEN_BUFFER_INFO   csbi;
