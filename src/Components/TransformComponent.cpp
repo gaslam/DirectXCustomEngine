@@ -154,7 +154,7 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	{
 		if (const auto transform{ parent->GetTransform() })
 		{
-			m_WorldRotation = transform->GetWorldRotation() + m_LocalRotation;
+			m_WorldRotation = transform->GetWorldRotation() * m_LocalRotation;
 		}
 	}
 	
@@ -162,13 +162,18 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	m_Forward = XMVector3TransformCoord(XMVectorSet(0.f,0.f,1.f,0.f), rotMat);
 	m_Right = XMVector3TransformCoord(XMVectorSet(-1.f,0.f,0.f,0.f), rotMat);
 	m_Up = XMVector3Cross(m_Forward, m_Right);
-	ChangeWorldMatrix();
+	ChangeWorldMatrix(owner);
 }
 
-void TransformComponent::ChangeWorldMatrix()
+void TransformComponent::ChangeWorldMatrix(const GameObject* owner)
 {
-	m_World =  XMMatrixScaling(m_WorldScale.x, m_WorldScale.y, m_WorldScale.z) * XMMatrixTranslation(m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z) *
-		XMMatrixRotationQuaternion(m_WorldRotation);
+	m_World = XMMatrixTranslation(m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z) * XMMatrixRotationQuaternion(m_WorldRotation)  * XMMatrixScaling(m_WorldScale.x, m_WorldScale.y, m_WorldScale.z);
+
+	if(const GameObject* parent{ owner->GetParent() })
+	{
+		if (const auto pTransform{ parent->GetTransform() })
+			m_World *= pTransform->GetWorldMatrix();
+	}
 }
 
 void TransformComponent::UpdateWorldPosition(const GameObject* owner)
@@ -187,13 +192,16 @@ void TransformComponent::UpdateWorldPosition(const GameObject* owner)
 			m_WorldPosition = transform->GetWorldPosition() + m_LocalPosition;
 		}
 	}
-	ChangeWorldMatrix();
+	ChangeWorldMatrix(owner);
 }
 
 void TransformComponent::UpdateWorldScale()
 {
 
+	m_TransformChanged |= ChangedTransform::Scale;
 	m_WorldScale = m_LocalScale;
 
-	ChangeWorldMatrix();
+	const GameObject* owner{ GetOwner() };
+
+	ChangeWorldMatrix(owner);
 }
