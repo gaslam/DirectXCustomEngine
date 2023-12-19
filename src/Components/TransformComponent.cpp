@@ -134,7 +134,7 @@ void TransformComponent::UpdateTransform()
 
 	if(m_TransformChanged & ChangedTransform::Scale)
 	{
-		UpdateWorldScale(owner);		
+		UpdateWorldScale();		
 	}
 
 
@@ -190,21 +190,10 @@ void TransformComponent::UpdateWorldPosition(const GameObject* owner)
 	ChangeWorldMatrix();
 }
 
-void TransformComponent::UpdateWorldScale(const GameObject* owner)
+void TransformComponent::UpdateWorldScale()
 {
 
-	const auto parent{ owner->GetParent() };
+	m_WorldScale = m_LocalScale;
 
-	if (parent == nullptr)
-	{
-		m_WorldScale = m_LocalScale;
-	}
-	else
-	{
-		if (const auto transform{ parent->GetTransform() })
-		{
-			m_WorldScale = transform->GetWorldScale() + m_WorldScale;
-		}
-	}
 	ChangeWorldMatrix();
 }

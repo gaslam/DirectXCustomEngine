@@ -81,7 +81,7 @@ private:
 
 	void UpdateTransform();
 	void UpdateWorldPosition(const GameObject* owner);
-	void UpdateWorldScale(const GameObject* owner);
+	void UpdateWorldScale();
 	void UpdateWorldRotation(const GameObject* owner);
 	void ChangeWorldMatrix();
 };
