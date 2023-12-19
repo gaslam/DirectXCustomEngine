@@ -10,6 +10,12 @@ public:
 	{
 	}
 
+	Circle(float diameter,const std::wstring& textureLocation ,  const Color& color = Color(Colors::White)) : Shape(textureLocation),
+		m_Diameter{ diameter },
+		m_Color{ color }
+	{
+	}
+
 	virtual ~Circle() override = default;
 
 	void SetDiameter(float diameter);
