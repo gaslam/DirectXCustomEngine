@@ -8,20 +8,27 @@ class TransformComponent;
 class MeshRenderComponent final : public BaseComponent
 {
 public:
-	MeshRenderComponent() = default;
+	explicit MeshRenderComponent(const std::wstring& dir = L"") : m_FolderLocation{ dir } {};
 	void Initialize(const SceneContext& context) override;
 	void Render(const SceneContext& context) override;
 	void OnDeviceLost() override;
 	void SetShape(std::unique_ptr<GeometricPrimitive>& shape);
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_roomTex;
-	std::unique_ptr<DescriptorHeap> m_resourceDescriptors;
-	std::unique_ptr<CommonStates> m_states;
-	std::unique_ptr<BasicEffect> m_Effect;
+	const std::wstring m_FolderLocation{};
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_pTexture;
+	std::unique_ptr<DescriptorHeap> m_pResourceDescriptors;
+	std::unique_ptr<CommonStates> m_pStates;
+	std::unique_ptr<BasicEffect> m_pEffect;
 
-	std::unique_ptr<GeometricPrimitive> m_Shape{};
+	std::unique_ptr<GeometricPrimitive> m_pShape{};
 
 	TransformComponent* m_pTransform{};
+
+	enum Descriptors
+	{
+		Earth,
+		Count
+	};
 };
 

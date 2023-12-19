@@ -8,11 +8,10 @@ using namespace DirectX;
 
 void MeshRenderComponent::Initialize(const SceneContext& context)
 {
-
     GameObject* owner{ GetOwner() };
 
     m_pTransform = owner->GetTransform();
-    if(!m_pTransform)
+    if (!m_pTransform)
     {
         Logger::LogWarning(L"Cannot translate the object cause no transform was found");
         return;
@@ -20,9 +19,9 @@ void MeshRenderComponent::Initialize(const SceneContext& context)
 
     DX::DeviceResources* pDeviceResources{ context.d12Context.pDeviceResources };
     ID3D12Device* pDevice{ pDeviceResources->GetD3DDevice() };
-    m_resourceDescriptors = std::make_unique<DescriptorHeap>(pDevice, 1);
+    m_pResourceDescriptors = std::make_unique<DescriptorHeap>(pDevice, Descriptors::Count);
 
-    m_states = std::make_unique<CommonStates>(pDevice);
+    m_pStates = std::make_unique<CommonStates>(pDevice);
 
     RenderTargetState rtState(pDeviceResources->GetBackBufferFormat(),
         pDeviceResources->GetDepthBufferFormat());
@@ -32,17 +31,31 @@ void MeshRenderComponent::Initialize(const SceneContext& context)
             &GeometricPrimitive::VertexType::InputLayout,
             CommonStates::Opaque,
             CommonStates::DepthDefault,
-            CommonStates::CullClockwise,
+            CommonStates::CullCounterClockwise,
             rtState);
 
-        m_Effect = std::make_unique<BasicEffect>(pDevice,
-            EffectFlags::Lighting, pd);
-        m_Effect->EnableDefaultLighting();
+        m_pEffect = std::make_unique<BasicEffect>(pDevice,
+            EffectFlags::Lighting | EffectFlags::Texture, pd);
+        m_pEffect->EnableDefaultLighting();
+        m_pEffect->SetTexture(m_pResourceDescriptors->GetGpuHandle(Descriptors::Earth), m_pStates->AnisotropicWrap());
     }
 
     ResourceUploadBatch resourceUpload(pDevice);
 
     resourceUpload.Begin();
+    if(!m_FolderLocation.empty())
+    {
+        const std::wstring location{ context.contentRoot + m_FolderLocation };
+
+        const HRESULT result{ CreateWICTextureFromFile(pDevice,resourceUpload,location.c_str(),m_pTexture.ReleaseAndGetAddressOf(),false) };
+
+        if (FAILED(result))
+        {
+            Logger::LogError(L"Cannot load texture in directory: " + location);
+        }
+
+        CreateShaderResourceView(pDevice, m_pTexture.Get(), m_pResourceDescriptors->GetCpuHandle(Descriptors::Earth));
+    }
 
     const future<void> uploadResourcesFinished{ resourceUpload.End(
         pDeviceResources->GetCommandQueue()) };
@@ -63,27 +76,27 @@ void MeshRenderComponent::Render(const SceneContext& context)
     const Matrix proj{ pCamera->GetProjectionMatrix() };
     const auto commandList{ context.d12Context.pDeviceResources->GetCommandList() };
     ID3D12DescriptorHeap* heaps[] = {
-    m_resourceDescriptors->Heap(), m_states->Heap()
+    m_pResourceDescriptors->Heap(), m_pStates->Heap()
     };
     commandList->SetDescriptorHeaps(std::size(heaps),
         heaps);
 
     const auto world{ m_pTransform->GetWorldMatrix() };
-    m_Effect->SetMatrices(world, view, proj);
-    m_Effect->Apply(commandList);
-    m_Shape->Draw(commandList);
+    m_pEffect->SetMatrices(world, view, proj);
+    m_pEffect->Apply(commandList);
+    m_pShape->Draw(commandList);
 }
 
 void MeshRenderComponent::OnDeviceLost()
 {
-    m_Shape.reset();
-    m_roomTex.Reset();
-    m_resourceDescriptors.reset();
-    m_states.reset();
-    m_Effect.reset();
+    m_pShape.reset();
+    m_pTexture.Reset();
+    m_pResourceDescriptors.reset();
+    m_pStates.reset();
+    m_pEffect.reset();
 }
 
 void MeshRenderComponent::SetShape(std::unique_ptr<GeometricPrimitive>& shape)
 {
-    m_Shape = std::move(shape);
+    m_pShape = std::move(shape);
 }
