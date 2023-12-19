@@ -27,7 +27,7 @@ namespace Engine
 		void RootOnDeviceLost();
 		virtual void OnDeviceLost() {};
 		[[nodiscard]]std::wstring GetName() const { return m_Name; }
-		[[nodiscard]] SceneContext GetSceneContext() const { return m_SceneContext; }
+		[[nodiscard]] const SceneContext& GetSceneContext() const { return m_SceneContext; }
 
 	protected:
 		virtual void Initialize();
@@ -39,8 +39,8 @@ namespace Engine
 			<typename T>
 			enable_if_t<is_base_of_v<GameObject, T>, T*>  AddChild(T* object)
 		{
-			object->RootSceneAttach(this);
 			m_pChildren.emplace_back(std::unique_ptr<GameObject>(object));
+			object->RootSceneAttach(this);
 			return object;
 
 		}

@@ -43,6 +43,7 @@ public:
 	void Translate(float x = 0.f,float y = 0.f, float z = 0.f);
 	void Rotate(float roll = 0.f, float pitch = 0.f, float yaw = 0.f, bool isInDegrees = false);
 	void Rotate(const Vector3& rotation, bool isInDegrees = false);
+	void Update(const SceneContext&) override;
 	void SetScale(Vector3 scale = {1.f,1.f,1.f});
 	[[nodiscard]] Vector3 GetWorldScale();
 
@@ -53,12 +54,20 @@ public:
 	[[nodiscard]]Vector3 GetRight();
 	[[nodiscard]]Vector3 GetLeft();
 	[[nodiscard]] Matrix GetWorldMatrix() const { return m_World; }
+	[[nodiscard]] bool IsDirty() const
+	{
+		const bool isTranslateDirty{ m_TransformChanged & ChangedTransform::Translate };
+		const bool isRotateDirty{ m_TransformChanged & ChangedTransform::Rotate };
+		const bool isScaleDirty{ m_TransformChanged & ChangedTransform::Scale };
+
+		return isTranslateDirty || isRotateDirty || isScaleDirty;
+	}
 private:
 
 	Vector3 m_WorldPosition{};
 	Vector3 m_LocalPosition{};
-	Vector3 m_WorldScale{};
-	Vector3 m_LocalScale{};
+	Vector3 m_WorldScale{1.f,1.f,1.f};
+	Vector3 m_LocalScale{m_WorldScale};
 	Vector3 m_Forward{Vector3::Forward};
 	Vector3 m_Right{Vector3::Right};
 	Vector3 m_Up{Vector3::Up};

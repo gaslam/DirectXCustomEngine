@@ -38,12 +38,12 @@ void Scene::RootInitialize(GameContext& gameContext)
 	m_SceneContext.windowWidth = gameContext.windowWidth;
 	m_SceneContext.timer = gameContext.timer;
 
-	FreeMoveCamera* pCamera{ new FreeMoveCamera{} };
-	AddChild(pCamera);
-
 	//Code to be added
 	Initialize();
 	Scene::Initialize();
+
+	FreeMoveCamera* pCamera{ new FreeMoveCamera{} };
+	AddChild(pCamera);
 
 	m_pActiveCamera = pCamera->GetComponent<CameraComponent>();
 

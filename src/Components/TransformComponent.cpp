@@ -66,6 +66,23 @@ void TransformComponent::Rotate(const Vector3& rotation, bool isInDegrees)
 	}
 }
 
+void TransformComponent::Update(const SceneContext&)
+{
+	const auto owner{ GetOwner() };
+	const auto parent{ owner->GetParent() };
+	if(parent == nullptr)
+	{
+		return;
+	}
+	const auto pTransform{ parent->GetTransform() };
+	if(pTransform->IsDirty())
+	{
+		m_TransformChanged |= ChangedTransform::Rotate;
+		m_TransformChanged |= ChangedTransform::Translate;
+		UpdateTransform();
+	}
+}
+
 void TransformComponent::SetScale(Vector3 scale)
 {
 	m_TransformChanged |= ChangedTransform::Scale;
@@ -93,7 +110,7 @@ Vector3 TransformComponent::GetLeft()
 
 void TransformComponent::UpdateTransform()
 {
-	if(m_TransformChanged == ChangedTransform::None)
+	if(!IsDirty())
 	{
 		return;
 	}
@@ -135,9 +152,9 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	}
 	else
 	{
-		if (const auto transform{ owner->GetTransform() })
+		if (const auto transform{ parent->GetTransform() })
 		{
-			m_WorldRotation = m_LocalRotation + transform->GetWorldRotation();
+			m_WorldRotation = transform->GetWorldRotation() + m_LocalRotation;
 		}
 	}
 	
@@ -145,12 +162,13 @@ void TransformComponent::UpdateWorldRotation(const GameObject* owner)
 	m_Forward = XMVector3TransformCoord(XMVectorSet(0.f,0.f,1.f,0.f), rotMat);
 	m_Right = XMVector3TransformCoord(XMVectorSet(-1.f,0.f,0.f,0.f), rotMat);
 	m_Up = XMVector3Cross(m_Forward, m_Right);
+	ChangeWorldMatrix();
 }
 
 void TransformComponent::ChangeWorldMatrix()
 {
-	m_World = XMMatrixScaling(m_WorldScale.x, m_WorldScale.y, m_WorldScale.z) *
-		XMMatrixRotationQuaternion(m_WorldRotation) * XMMatrixTranslation(m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z);
+	m_World =  XMMatrixScaling(m_WorldScale.x, m_WorldScale.y, m_WorldScale.z) * XMMatrixTranslation(m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z) *
+		XMMatrixRotationQuaternion(m_WorldRotation);
 }
 
 void TransformComponent::UpdateWorldPosition(const GameObject* owner)
@@ -164,7 +182,7 @@ void TransformComponent::UpdateWorldPosition(const GameObject* owner)
 	}
 	else
 	{
-		if (const auto transform{ owner->GetTransform() })
+		if (const auto transform{ parent->GetTransform() })
 		{
 			m_WorldPosition = transform->GetWorldPosition() + m_LocalPosition;
 		}
@@ -183,7 +201,7 @@ void TransformComponent::UpdateWorldScale(const GameObject* owner)
 	}
 	else
 	{
-		if (const auto transform{ owner->GetTransform() })
+		if (const auto transform{ parent->GetTransform() })
 		{
 			m_WorldScale = transform->GetWorldScale() + m_WorldScale;
 		}
