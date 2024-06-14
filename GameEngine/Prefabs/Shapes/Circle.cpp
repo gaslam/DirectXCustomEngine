@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Circle.h"
 #include "Utils/GameHandler.h"
+#include "Utils/Locator.h"
 #include "Utils/Utils.h"
 
 void Circle::RenderImGui()
 {
+#ifdef _DEBUG
 	const char* format{ "%.1f" };
 	const float currentDiameter{ m_Diameter };
 	float newDiameter{ currentDiameter };
@@ -13,6 +15,8 @@ void Circle::RenderImGui()
 	{
 		SetDiameter(newDiameter);
 	}
+#endif
+
 }
 
 void Circle::SetDiameter(float diameter)

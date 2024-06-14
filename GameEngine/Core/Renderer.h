@@ -21,9 +21,7 @@ public:
 	void OnDisplayChange() const;
 	void OnWindowSizeChanged(int width, int height);
 	void Render();
-#ifdef _DEBUG
 	void InitImGui();
-#endif
 	void Initialize(HWND window, int width, int height);
 	[[nodiscard]] DX::DeviceResources* GetDeviceResources() const { return  m_deviceResources.get(); }
 

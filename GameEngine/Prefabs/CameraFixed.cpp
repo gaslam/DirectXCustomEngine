@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "CameraFixed.h"
 
 #include "Components/CameraComponent.h"

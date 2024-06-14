@@ -1,7 +1,10 @@
 #pragma once
+#include "pch.h"
 #include "Main/Singleton.h"
 #include <source_location>
 #include <map>
+
+#include "Utils/Utils.h"
 
 using namespace std;
 
@@ -26,6 +29,18 @@ struct InfoLog
 		fileLocation{ location }
 	{
 
+	}
+
+	InfoLog(const char* text, const source_location& location = source_location::current()) :
+		warningText{ StringUtils::EncodeUTF8(text) },
+		fileLocation{ location }
+	{
+	}
+
+	InfoLog(const std::string& text, const source_location& location = source_location::current()) :
+		warningText{ StringUtils::EncodeUTF8(text) },
+		fileLocation{ location }
+	{
 	}
 };
 

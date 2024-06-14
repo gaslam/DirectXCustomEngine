@@ -3,7 +3,7 @@
 
 #include "Components/CameraComponent.h"
 #include "SceneClasses/Scene.h"
-#include "Utils/Utils.h"
+#include <filesystem>
 
 void ModelRenderComponent::InitDeviceResources()
 {
@@ -19,8 +19,14 @@ void ModelRenderComponent::InitDeviceResources()
 	ID3D12Device* pDevice{ pHandler->GetDevice() };
 	const DeviceResources* pDeviceResources{ pHandler->GetDeviceResources() };
 	const CommonStates* pStates{ GetStates() };
+	namespace fs = std::filesystem;
 
-
+	if(!fs::exists(folderLocation))
+	{
+		std::wstring error{ L"Cannot load file: " + folderLocation };
+		Logger::LogError(error);
+		return;
+	}
 	m_pModel = Model::CreateFromSDKMESH(pDevice, folderLocation.c_str());
 
 	ResourceUploadBatch resourceUpload(pDevice);

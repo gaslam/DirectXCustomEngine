@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "ModelObject.h"
 
 #include "Components/Meshes/ModelRenderComponent.h"

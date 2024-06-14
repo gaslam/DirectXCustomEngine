@@ -1,5 +1,6 @@
 #pragma once
-#include "Main/Logger.h"
+#include "pch.h"
+#include "Main/Singleton.h"
 
 namespace Engine
 {
@@ -30,15 +31,5 @@ namespace Engine
 		GameObjectCommand(GameObjectCommand&& other) noexcept = delete;
 		GameObjectCommand& operator=(const GameObjectCommand& other) = delete;
 		GameObjectCommand& operator=(GameObjectCommand&& other) noexcept = delete;
-	};
-
-	class TestCommand: public Command
-	{
-	public:
-		void Execute() override
-		{
-			const auto pLogger{ Logger::GetInstance() };
-			pLogger->LogInfo(L"This is a test command");
-		}
 	};
 }

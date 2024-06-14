@@ -7,12 +7,14 @@
 #include <Core/Renderer.h>
 #include "Managers/SceneManager.h"
 #include "Managers/InputManager.h"
+#include "Utils/Locator.h"
 
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
+using namespace DX;
 
 Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstance() }, m_pRenderer{ std::make_unique<Renderer>() },m_pTimer{new StepTimer{}}
 {

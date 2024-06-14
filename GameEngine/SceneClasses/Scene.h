@@ -7,7 +7,7 @@ namespace Engine
 	class Scene
 	{
 	public:
-		explicit Scene(const std::wstring& name) : m_Name{std::move(name)}
+		explicit Scene(const std::wstring& name) : m_Name{name}
 		{
 		}
 

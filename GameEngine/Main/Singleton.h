@@ -8,7 +8,7 @@ public:
 	{
 		if(!m_pInstance)
 		{
-			m_pInstance = new T{};
+			m_pInstance = new T();
 		}
 		return m_pInstance;
 	}

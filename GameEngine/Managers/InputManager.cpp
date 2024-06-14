@@ -8,13 +8,15 @@ using namespace Engine;
 InputManager::InputManager()
 {
 	m_pGamepad = std::make_unique<GamePad>();
-	const auto pMouse{ new Mouse{}};
+	m_pMouse = new Mouse{};
 	const HWND hWnd{ GetActiveWindow() };
-	pMouse->SetWindow(hWnd);
-	pMouse->SetMode(Mouse::MODE_RELATIVE);
-	m_pMouseHandler = std::make_unique<MouseHandler>(pMouse);
+	m_pMouse->SetWindow(hWnd);
+	m_pMouse->SetMode(Mouse::MODE_RELATIVE);
+	m_pMouseHandler = std::make_unique<MouseHandler>(m_pMouse);
 	m_pKeyboard = std::make_unique<Keyboard>();
 }
+
+
 
 void InputManager::ProcessControllerInput(float /*deltaTime*/)
 {
@@ -38,12 +40,13 @@ void InputManager::ProcessControllerInput(float /*deltaTime*/)
 	}
 }
 
-void InputManager::BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Command* command)
+void InputManager::BindButtonsToCommand(const unsigned int id, const XboxControllerButton& button,const Keyboard::Keys& key, const GamePad::ButtonStateTracker::ButtonState& state, Command* command)
 {
 	KeyInput input{};
 	input.id = static_cast<int>(m_Commands.size());
 	input.controllerId = id;
 	input.controllerButton = button;
+	input.keyboardKey = key;
 	input.state = state;
 	m_Commands.insert({ input,std::unique_ptr<Command>(command) });
 }
@@ -77,6 +80,25 @@ void InputManager::Update()
 	const auto pKeyState{ m_pKeyboard->GetState() };
 	m_keyboardState.Update(pKeyState);
 	m_pMouseHandler->UpdateDelta();
+	for(const auto& command: m_Commands)
+	{
+		bool canExecute{ false };
+		if(m_keyboardState.IsKeyPressed(command.first.keyboardKey) && command.first.state == GamePad::ButtonStateTracker::PRESSED)
+		{
+			canExecute = true;
+		}
+
+		if (m_keyboardState.IsKeyReleased(command.first.keyboardKey) && command.first.state == GamePad::ButtonStateTracker::RELEASED)
+		{
+			canExecute = true;
+		}
+
+		if(!canExecute)
+		{
+			continue;
+		}
+		command.second->Execute();
+	}
 }
 
 SimpleMath::Vector2 InputManager::GetJoystickCoords(XboxJoystick joystick, unsigned int controllerId)

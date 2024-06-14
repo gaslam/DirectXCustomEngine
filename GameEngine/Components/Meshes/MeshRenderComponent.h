@@ -1,5 +1,6 @@
 #pragma once
 #include "Components/BaseComponent.h"
+#include <CommonStates.h>
 
 using namespace DirectX;
 

@@ -2,7 +2,6 @@
 #include <bitset>
 
 class Component;
-class Entity;
 
 using ComponentTypeID = std::size_t;
 
@@ -21,7 +20,7 @@ template <typename T> inline ComponentTypeID GetComponentTypeID() noexcept
 
 constexpr std::size_t maxComponents{ 32 };
 
-using ComponentBitSet = bitset<maxComponents>;
+using ComponentBitSet = std::bitset<maxComponents>;
 using ComponentArray = std::array<Component*, maxComponents>;
 
 

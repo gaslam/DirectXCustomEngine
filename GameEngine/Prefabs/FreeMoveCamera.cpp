@@ -2,6 +2,7 @@
 #include "FreeMoveCamera.h"
 #include "Components/CameraComponent.h"
 #include "Managers/InputManager.h"
+#include "Utils/Locator.h"
 
 void FreeMoveCamera::Initialize()
 {

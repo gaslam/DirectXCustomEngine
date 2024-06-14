@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "imgui.h"
-#include "../Components/BaseComponent.h"
-#include "../Components/TransformComponent.h"
+#include "Components/BaseComponent.h"
+#include "Components/TransformComponent.h"
 #include "Utils/Utils.h"
 
 using namespace std;
@@ -146,7 +146,7 @@ namespace Engine
 		void RootRenderImGui()
 		{
 			ImGui::PushID(this);
-			const std::string tag{ StringUtils::DecodeUTF8(m_Tag) };
+			const std::string tag{ StringUtils::DecodeUTF8(m_Tag.c_str()) };
 			if (ImGui::CollapsingHeader(tag.c_str()))
 			{
 				RenderImGui();
@@ -160,6 +160,7 @@ namespace Engine
 				}
 			}
 			ImGui::PopID();
+
 		}
 
 		void ChangeTag(const std::wstring& tag)
@@ -196,12 +197,12 @@ namespace Engine
 		void RootInitDeviceResources()
 		{
 			InitDeviceResources();
-			for(const auto& pComponent: m_pComponents | views::values)
+			for (const auto& pComponent : m_pComponents | views::values)
 			{
 				pComponent->InitDeviceResources();
 			}
 
-			for(const auto& pChild: m_pChildren)
+			for (const auto& pChild : m_pChildren)
 			{
 				pChild->RootInitDeviceResources();
 			}

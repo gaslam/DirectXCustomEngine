@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "pch.h"
 
 using namespace DirectX;
 using namespace SimpleMath;

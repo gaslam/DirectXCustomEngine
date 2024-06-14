@@ -1,16 +1,20 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#ifdef _DEBUG
 #include "imgui.h"
-#include "imgui_impl_dx12.h"
-#include "imgui_impl_win32.h"
-#endif
+#include "backends/imgui_impl_dx12.h"
+#include "backends/imgui_impl_win32.h"
 #include "Managers/SceneManager.h"
 
 
 Renderer::Renderer() :
-	m_deviceResources{ std::make_unique<DX::DeviceResources>() }
+	m_deviceResources{ std::make_unique<DX::DeviceResources>(
+		DXGI_FORMAT_R8G8B8A8_UNORM,     // Swapchain format (for example)
+		DXGI_FORMAT_D32_FLOAT,          // Depth/stencil format (for example)
+		2,                               // Backbuffer count (for example)
+		D3D_FEATURE_LEVEL_12_0,
+		DX::DeviceResources::c_AllowTearing | DX::DeviceResources::c_EnableHDR // Options
+	) }
 {
 	// TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
 	//   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
@@ -24,13 +28,11 @@ Renderer::~Renderer()
 	{
 		m_deviceResources->WaitForGpu();
 	}
-#ifdef _DEBUG
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
 	m_pDescriptorHeaps->Release();
-#endif
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -52,12 +54,10 @@ void Renderer::OnDeviceLost()
 	const auto pTimer{ Locator::GetTimer() };
 	pTimer->ResetElapsedTime();
 
-#ifdef _DEBUG
 	ImGui::EndFrame();
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-#endif
 }
 
 void Renderer::OnDeviceRestored()
@@ -65,7 +65,9 @@ void Renderer::OnDeviceRestored()
 	CreateDeviceDependentResources();
 
 	CreateWindowSizeDependentResources();
+
 	InitImGui();
+
 }
 
 // These are the resources that depend on the device.
@@ -127,7 +129,6 @@ void Renderer::Render()
 
 	// TODO: Add your rendering code here.
 	SceneManager::GetInstance()->Render();
-#ifdef _DEBUG
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -168,7 +169,7 @@ void Renderer::Render()
 
 	commandList->SetDescriptorHeaps(1, &m_pDescriptorHeaps);
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	const ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Update and Render additional Platform Windows
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -176,7 +177,6 @@ void Renderer::Render()
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault(nullptr, (void*)m_deviceResources->GetCommandQueue());
 	}
-#endif
 	PIXEndEvent(commandList);
 	// Show the new frame.
 	PIXBeginEvent(m_deviceResources->GetCommandQueue(), PIX_COLOR_DEFAULT, L"Present");
@@ -184,7 +184,6 @@ void Renderer::Render()
 	PIXEndEvent(m_deviceResources->GetCommandQueue());
 }
 
-#ifdef _DEBUG
 void Renderer::InitImGui()
 {
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
@@ -230,7 +229,6 @@ void Renderer::InitImGui()
 		DXGI_FORMAT_R8G8B8A8_UNORM, m_pDescriptorHeaps,
 		m_pDescriptorHeaps->GetCPUDescriptorHandleForHeapStart(),
 		m_pDescriptorHeaps->GetGPUDescriptorHandleForHeapStart());
-#endif
 }
 
 
@@ -244,8 +242,8 @@ void Renderer::Initialize(HWND window, int width, int height)
 
 	m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
-
 	InitImGui();
+
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -263,7 +261,7 @@ void Renderer::Update(float /*elapsedTime*/)
 // Helper method to clear the back buffers.
 void Renderer::Clear() const
 {
-	auto commandList = m_deviceResources->GetCommandList();
+	const auto commandList = m_deviceResources->GetCommandList();
 
 	// Clear the views.
 	auto const rtvDescriptor = m_deviceResources->GetRenderTargetView();

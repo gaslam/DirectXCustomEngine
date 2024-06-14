@@ -3,7 +3,9 @@
 
 #include <Prefabs/CameraFixed.h>
 
+
 #include "imgui.h"
+
 #include "Components/CameraComponent.h"
 #include "Prefabs/FreeMoveCamera.h"
 #include "Utils/Utils.h"
@@ -36,6 +38,7 @@ void Scene::RootRender()
 
 void Scene::RootRenderImGui() const
 {
+
 	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
 	{
 		pChild->RootRenderImGui();

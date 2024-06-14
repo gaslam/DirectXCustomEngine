@@ -1,3 +1,5 @@
+#include "Logger.h"
+
 #include "pch.h"
 #include <iostream>
 
@@ -38,6 +40,7 @@ void Logger::Initialize()
 void Logger::LogWarning(const InfoLog& info)
 {
 	HandleLog(LogLevel::WARNING, info);
+	ExitGame();
 }
 
 void Logger::LogError(const InfoLog& info)
@@ -65,7 +68,7 @@ void Logger::HandleLog([[maybe_unused]]LogLevel type, [[maybe_unused]]const Info
 
 	SetConsoleTextAttribute(m_pConsoleHandle, typeInfo.color);
 
-	std::wcout << "[" << typeInfo.typeName << "]: " << info.warningText << "\n\n"
+	(*m_Os) << "[" << typeInfo.typeName << "]: " << info.warningText << "\n\n"
 		<< "Date: " << st.wDay << "-" << st.wMonth << "-" << st.wYear << " (dd/mm/yyyy)" << "\n"
 		<< "Time: " << st.wHour << ":" << st.wMinute << ":" << st.wSecond << ":" << st.wMilliseconds << "\n"
 		<< "File: " << info.fileLocation.file_name() << "(" << info.fileLocation.line() << ")" << "\n"

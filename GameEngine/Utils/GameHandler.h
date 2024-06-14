@@ -1,13 +1,17 @@
 #pragma once
+#include "pch.h"
 #include "Core/DeviceResources.h"
-#include "Main/Logger.h"
 
 
 class GameHandlerBase
 {
 public:
 	GameHandlerBase() = default;
-	virtual ~GameHandlerBase() = default;
+	virtual ~GameHandlerBase()
+	{
+		int test{};
+		test++;
+	};
 
 	virtual void Initialize() = 0;
 
@@ -67,7 +71,8 @@ public:
 	{
 		if (pResources == nullptr)
 		{
-			Logger::LogError(L"Cannot set device resources to null!! Make sure it is always available");
+			//TODO: uncomment this and fix error
+			//Logger::LogError(L"Cannot set device resources to null!! Make sure it is always available");
 			return;
 		}
 		m_pDeviceResources = pResources;
@@ -77,7 +82,8 @@ public:
 	{
 		if (pDevice == nullptr)
 		{
-			Logger::LogError(L"Cannot set device to null!! Make sure it is always available");
+			//TODO: uncomment this and fix error
+			//Logger::LogError(L"Cannot set device to null!! Make sure it is always available");
 			return;
 		}
 		m_pDevice = pDevice;

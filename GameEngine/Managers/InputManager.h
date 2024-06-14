@@ -1,10 +1,12 @@
 #pragma once
+#include "pch.h"
 #include <map>
 #include <memory>
 
 #include "Command/Command.h"
 #include "Main/Singleton.h"
 #include "Structs/KeyStructs.h"
+#include "Mouse.h"
 
 using namespace DirectX;
 using namespace std;
@@ -17,7 +19,7 @@ namespace Engine
 	public:
 		explicit InputManager();
 		void ProcessControllerInput(float deltaTime);
-		void BindButtonsToCommand(unsigned int id, XboxControllerButton& button, GamePad::ButtonStateTracker::ButtonState& state, Command* command);
+		void BindButtonsToCommand(const unsigned int id, const XboxControllerButton& button, const Keyboard::Keys& key, const GamePad::ButtonStateTracker::ButtonState& state, Command* command);
 		void BindButtonsToInput(unsigned int id, const std::wstring& input, Keyboard::Keys& keyboardKey, XboxControllerButton button = NONE);
 		void Update();
 		[[nodiscard]] SimpleMath::Vector2 GetJoystickCoords(XboxJoystick joystick, unsigned int controllerId);
@@ -28,6 +30,11 @@ namespace Engine
 		bool IsHeld(const wstring& input);
 		void Resume() const;
 		void Suspend() const;
+		void SetMouseMode(const Mouse::Mode& mode, const bool isVisible = false) const
+		{
+			m_pMouse->SetMode(mode);
+			m_pMouse->SetVisible(isVisible);
+		}
 
 		[[nodiscard]] Mouse::State GetMouseState() const { return m_pMouseHandler->GetState(); }
 		[[nodiscard]] SimpleMath::Vector2 GetMouseDelta() const { return m_pMouseHandler->GetDelta(); }
@@ -48,7 +55,7 @@ namespace Engine
 				if (mouseState.positionMode == Mouse::MODE_RELATIVE)
 				{
 					m_CurrentPos = SimpleMath::Vector2{ static_cast<float>(mouseState.x),static_cast<float>(mouseState.y) };
-					if(m_CurrentPos.LengthSquared() == 0.0f)
+					if (m_CurrentPos.LengthSquared() == 0.0f)
 					{
 						m_CurrentPos = m_PreviousPos;
 					}
@@ -58,6 +65,10 @@ namespace Engine
 				}
 			}
 
+			void SetMode(const Mouse::Mode& mode) const
+			{
+				m_pMouse->SetMode(mode);
+			}
 			[[nodiscard]] Mouse::State GetState() const { return m_pMouse->GetState(); };
 			[[nodiscard]] SimpleMath::Vector2 GetDelta() const { return m_Delta; };
 		private:
@@ -75,6 +86,7 @@ namespace Engine
 		unique_ptr<GamePad> m_pGamepad{};
 		unique_ptr<Keyboard> m_pKeyboard{};
 		unique_ptr<MouseHandler> m_pMouseHandler{};
+		Mouse* m_pMouse{ nullptr };
 
 		CommandsMap m_Commands{};
 		InputMap m_Inputs{};

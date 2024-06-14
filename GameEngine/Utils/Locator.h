@@ -27,9 +27,17 @@ namespace Engine
 
 		static void Provide(std::unique_ptr<GameHandlerBase>&& pGameHandler)
 		{
-
+			if(m_pGameHandler != nullptr)
+			{
+				m_pGameHandler.reset();
+			}
 			m_pGameHandler = pGameHandler != nullptr ? std::move(pGameHandler) : std::make_unique<NullGameHandler>();
 			m_pGameHandler->Initialize();
+		}
+		~Locator()
+		{
+			m_pTimer.reset();
+			m_pGameHandler.reset();
 		}
 	private:
 		inline static std::unique_ptr<Timer> m_pTimer{};
