@@ -8,7 +8,7 @@ namespace Engine
 	class TextureManager : public Singleton<TextureManager>
 	{
 	public:
-		[[nodiscard]] ID3D12Resource* GetTexture(const std::wstring& textureName);
+		[[nodiscard]] Microsoft::WRL::ComPtr<ID3D12Resource> GetTexture(const std::wstring& textureName);
 
 		void OnDeviceLost();
 
@@ -18,7 +18,7 @@ namespace Engine
 		}
 	private:
 
-		ID3D12Resource* LoadTexture(const std::wstring& textureName);
+		Microsoft::WRL::ComPtr<ID3D12Resource> LoadTexture(const std::wstring& textureName);
 		std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D12Resource>> m_Textures;
 	};
 }

@@ -71,7 +71,7 @@ void ShapeRenderComponent::InitDeviceResources()
 
 	resourceUpload.Begin();
 
-		CreateShaderResourceView(pDevice, pTexture, m_pResourceDescriptors->GetCpuHandle(Descriptors::Earth));
+		CreateShaderResourceView(pDevice, pTexture.Get(), m_pResourceDescriptors->GetCpuHandle(Descriptors::Earth));
 
 	RenderTargetState rtState(pDeviceResources->GetBackBufferFormat(),
 		pDeviceResources->GetDepthBufferFormat());
