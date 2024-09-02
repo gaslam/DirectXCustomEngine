@@ -56,7 +56,7 @@ pch.h
 StepTimer.h
 d3dx12.h
 ${IMGUI_SOURCES}
-)
+ "ECS/ECS.h")
 else()
 add_library(GameEngine STATIC
 ${COMMAND_HEADERS}

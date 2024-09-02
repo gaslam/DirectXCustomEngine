@@ -196,6 +196,10 @@ namespace Engine
 
 		void RootInitDeviceResources()
 		{
+			if (m_DeviceRcInitialized)
+			{
+				return;
+			}
 			InitDeviceResources();
 			for (const auto& pComponent : m_pComponents | views::values)
 			{
@@ -206,6 +210,8 @@ namespace Engine
 			{
 				pChild->RootInitDeviceResources();
 			}
+
+			m_DeviceRcInitialized = true;
 		}
 
 		virtual void Initialize() {};
@@ -258,6 +264,7 @@ namespace Engine
 		void RootSceneAttach(Scene* pScene);
 
 		bool m_Initialized{ false };
+		bool m_DeviceRcInitialized{ false };
 		std::wstring m_Tag{};
 
 		GameObject* m_pParent{};

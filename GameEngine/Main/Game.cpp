@@ -30,11 +30,7 @@ Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstanc
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-    m_pSceneManager->Initialize();
     m_pRenderer->Initialize(window, width, height);
-    GameHandlerBase* pHandler{ Locator::GetGameHandler() };
-    const DeviceResources* pDeviceResources{ m_pRenderer->GetDeviceResources() };
-    pHandler->SetDevice(pDeviceResources->GetD3DDevice());
 }
 
 #pragma region Frame Update

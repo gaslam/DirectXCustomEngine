@@ -41,12 +41,14 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 add_executable(GameExe WIN32
 Main/Main.cpp
 Utils/SceneUtils.h
-${IMGUI_SOURCES} "Commands/ChangeMouseCommand.h")
+Scene/TestScene.h
+${IMGUI_SOURCES} "Commands/ChangeMouseCommand.h"  "Scene/TestScene.cpp")
 else()
 add_executable(GameExe WIN32
 Main/Main.cpp
 Utils/SceneUtils.h
- "Commands/QuitCommand.h")
+Scene/TestScene.cpp
+ "Commands/QuitCommand.h" )
 endif()
 if(MSVC)
     target_compile_options(GameExe PRIVATE /Wall /EHsc /GR "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")

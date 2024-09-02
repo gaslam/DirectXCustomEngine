@@ -87,12 +87,14 @@ void Renderer::CreateDeviceDependentResources()
 	auto pHandler{ Locator::GetGameHandler() };
 	pHandler->SetDevice(device);
 	pHandler->SetDeviceResources(m_deviceResources.get());
-
 	// If using the DirectX Tool Kit for DX12, uncomment this line:
 	m_pGraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(device);
 
+	auto pSceneManager{ Engine::SceneManager::GetInstance() };
+	pSceneManager->Initialize();
+
 	// TODO: Initialize device dependent objects here (independent of window size).
-	Engine::SceneManager::GetInstance()->InitDeviceResources();
+	pSceneManager->InitDeviceResources();
 
 	m_deviceResources->WaitForGpu();
 

@@ -32,6 +32,6 @@ std::wstring MeshRenderComponent::GetFolderLocation() const
 {
 	const GameHandlerBase* pHandler{ Locator::GetGameHandler() };
 	const std::wstring folder{ pHandler->GetContentRoot() };
-	const std::wstring result{   folder + m_FolderLocation };
+	const std::wstring result{   folder + L"Textures/" + m_FolderLocation };
 	return result;
 }

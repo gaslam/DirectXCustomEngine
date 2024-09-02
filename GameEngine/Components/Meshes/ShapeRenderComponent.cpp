@@ -54,11 +54,17 @@ void ShapeRenderComponent::Render()
 
 void ShapeRenderComponent::InitDeviceResources()
 {
-	MeshRenderComponent::Initialize();
+	MeshRenderComponent::InitDeviceResources();
 	const GameHandlerBase* pHandler{ Locator::GetGameHandler() };
 	DeviceResources* pDeviceResources{ pHandler->GetDeviceResources() };
 	ID3D12Device* pDevice{ pHandler->GetDevice() };
 	const std::wstring folderLocation{ GetFolderLocation() };
+
+	m_pResourceDescriptors = std::make_unique<DescriptorHeap>(pDevice,
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+		Descriptors::Count);
+
 	ResourceUploadBatch resourceUpload(pDevice);
 
 	resourceUpload.Begin();
