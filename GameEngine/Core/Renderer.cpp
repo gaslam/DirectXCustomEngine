@@ -5,6 +5,7 @@
 #include "backends/imgui_impl_dx12.h"
 #include "backends/imgui_impl_win32.h"
 #include "Managers/SceneManager.h"
+#include "Managers/TextureManager.h"
 
 
 Renderer::Renderer() :
@@ -48,6 +49,8 @@ void Renderer::OnDeviceLost()
 	m_deviceResources->WaitForGpu();
 	m_pGraphicsMemory.reset();
 	m_pDescriptorHeaps->Release();
+	const auto pTextureManager{ TextureManager::GetInstance() };
+	pTextureManager->OnDeviceLost();
 	const auto pSceneManager{ Engine::SceneManager::GetInstance() };
 	pSceneManager->OnDeviceLost();
 

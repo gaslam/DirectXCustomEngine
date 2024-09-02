@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ShapeRenderComponent.h"
 
+#include "Managers/TextureManager.h"
 #include "SceneClasses/Scene.h"
 
 
@@ -58,7 +59,6 @@ void ShapeRenderComponent::InitDeviceResources()
 	const GameHandlerBase* pHandler{ Locator::GetGameHandler() };
 	DeviceResources* pDeviceResources{ pHandler->GetDeviceResources() };
 	ID3D12Device* pDevice{ pHandler->GetDevice() };
-	const std::wstring folderLocation{ GetFolderLocation() };
 
 	m_pResourceDescriptors = std::make_unique<DescriptorHeap>(pDevice,
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
@@ -67,19 +67,11 @@ void ShapeRenderComponent::InitDeviceResources()
 
 	ResourceUploadBatch resourceUpload(pDevice);
 
+	auto pTexture{ Engine::TextureManager::GetInstance()->GetTexture(L"earth.bmp") };
+
 	resourceUpload.Begin();
-	if (!folderLocation.empty())
-	{
 
-		const HRESULT result{ CreateWICTextureFromFile(pDevice,resourceUpload,folderLocation.c_str(),m_pTexture.ReleaseAndGetAddressOf(),false) };
-
-		if (FAILED(result))
-		{
-			Logger::LogError(L"Cannot load texture in directory: " + folderLocation);
-		}
-
-		CreateShaderResourceView(pDevice, m_pTexture.Get(), m_pResourceDescriptors->GetCpuHandle(Descriptors::Earth));
-	}
+		CreateShaderResourceView(pDevice, pTexture, m_pResourceDescriptors->GetCpuHandle(Descriptors::Earth));
 
 	RenderTargetState rtState(pDeviceResources->GetBackBufferFormat(),
 		pDeviceResources->GetDepthBufferFormat());
@@ -114,7 +106,6 @@ void ShapeRenderComponent::OnDeviceLost()
 {
 	MeshRenderComponent::OnDeviceLost();
 	m_pShape.reset();
-	m_pTexture.Reset();
 
 	for (unique_ptr<BasicEffect>& pEffect : m_pEffects)
 	{

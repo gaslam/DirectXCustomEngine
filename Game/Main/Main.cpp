@@ -9,6 +9,7 @@
 #include "Main/Game.h"
 #include "Managers/SceneManager.h"
 #include "Managers/InputManager.h"
+#include "Managers/TextureManager.h"
 
 //#include "vld.h"
 
@@ -131,10 +132,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	g_game.reset();
 	const auto pSceneManager{ Engine::SceneManager::GetInstance() };
 	const auto pInputManager{ Engine::InputManager::GetInstance() };
+	const auto pTextureManager{ Engine::TextureManager::GetInstance() };
 	const auto pLogger{ Logger::GetInstance() };
 	pSceneManager->Destroy();
 	pInputManager->Destroy();
 	pLogger->Destroy();
+	pTextureManager->Clean();
+	pTextureManager->Destroy();
 	return static_cast<int>(msg.wParam);
 }
 

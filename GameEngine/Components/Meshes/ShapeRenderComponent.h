@@ -19,7 +19,6 @@ public:
     }
 
 private:
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_pTexture;
     std::unique_ptr<DescriptorHeap> m_pResourceDescriptors;
     std::vector<std::unique_ptr<DirectX::BasicEffect>> m_pEffects;
     std::unique_ptr<GeometricPrimitive> m_pShape{};
