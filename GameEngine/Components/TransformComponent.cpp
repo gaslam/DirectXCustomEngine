@@ -2,6 +2,7 @@
 #include "TransformComponent.h"
 
 #include "SceneClasses/GameObject.h"
+#include "SceneClasses/Scene.h"
 
 Vector3 TransformComponent::GetWorldPosition()
 {
@@ -74,21 +75,12 @@ void TransformComponent::Rotate(const Vector3& rotation, bool isInDegrees)
 	}
 }
 
-void TransformComponent::Update()
+void TransformComponent::Initialize(Scene* pScene)
 {
-	const auto owner{ GetOwner() };
-	const auto parent{ owner->GetParent() };
-	if (parent == nullptr)
-	{
-		return;
-	}
-	const auto pTransform{ parent->GetTransform() };
-	if (pTransform->IsDirty())
-	{
-		m_TransformChanged |= ChangedTransform::Rotate;
-		m_TransformChanged |= ChangedTransform::Translate;
-		UpdateTransform();
-	}
+	pScene->AddUpdateCallback([&](const Scene*)
+		{
+			UpdateTransform();
+		});
 }
 
 void TransformComponent::SetScale(Vector3 scale)

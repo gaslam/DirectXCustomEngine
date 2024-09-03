@@ -5,7 +5,7 @@
 
 using namespace DirectX;
 
-void MeshRenderComponent::Initialize()
+void MeshRenderComponent::Initialize(Scene* pScene)
 {
 	const GameObject* owner{ GetOwner() };
 

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	class Scene;
 	class GameObject;
 	class BaseComponent
 	{
@@ -16,10 +17,9 @@ namespace Engine
 		BaseComponent& operator=(const BaseComponent& other) = delete;
 		BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
 
-		virtual void Initialize() = 0;
+		virtual void Initialize(Scene*) = 0;
 		virtual void PostInitialize() {}
 		virtual void InitDeviceResources(){}
-		virtual void Update() {}
 		virtual void Render() {}
 		virtual void ShadowMapRender() {}
 		virtual void PostRender() {}

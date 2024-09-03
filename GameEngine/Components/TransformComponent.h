@@ -38,12 +38,11 @@ class TransformComponent : public BaseComponent
 {
 
 public:
-	void Initialize() override{};
+	void Initialize(Scene* pScene) override;
 	void Translate(const Vector3& translation);
 	void Translate(float x = 0.f,float y = 0.f, float z = 0.f);
 	void Rotate(float roll = 0.f, float pitch = 0.f, float yaw = 0.f, bool isInDegrees = false);
 	void Rotate(const Vector3& rotation, bool isInDegrees = false);
-	void Update() override;
 	void SetScale(Vector3 scale = {1.f,1.f,1.f});
 	void SetScale(float value);
 	[[nodiscard]] Vector3 GetWorldScale();

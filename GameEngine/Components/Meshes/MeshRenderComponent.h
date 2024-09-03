@@ -11,7 +11,7 @@ class MeshRenderComponent : public BaseComponent
 public:
 	explicit MeshRenderComponent(const std::wstring& dir = L"") : m_FolderLocation{ dir } {};
 	virtual ~MeshRenderComponent() override = default;
-	virtual void Initialize() override;
+	virtual void Initialize(Scene* pScene) override;
 	virtual void InitDeviceResources() override;
 	virtual void Render() override = 0;
 	virtual void OnDeviceLost() override;

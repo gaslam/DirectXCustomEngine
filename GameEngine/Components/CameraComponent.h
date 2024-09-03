@@ -21,9 +21,8 @@ namespace Engine
         CameraComponent& operator=(const CameraComponent& other) = delete;
         CameraComponent& operator=(CameraComponent&& other)noexcept = delete;
 
-        void Update() override;
         void ChangeProjection();
-        void Initialize() override;
+        void Initialize(Scene* pScene) override;
         void MoveCamera(Vector3 pos);
         [[nodiscard]]Matrix GetProjectionMatrix() const { return m_Proj; }
         [[nodiscard]]Matrix GetViewMatrix() const { return m_View; }

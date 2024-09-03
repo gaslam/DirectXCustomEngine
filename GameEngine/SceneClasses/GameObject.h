@@ -183,7 +183,7 @@ namespace Engine
 			Initialize(pScene);
 			for (const auto& pComponent : m_pComponents | views::values)
 			{
-				pComponent->Initialize();
+				pComponent->Initialize(pScene);
 			}
 
 			for (const auto& pChild : m_pChildren)

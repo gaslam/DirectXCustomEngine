@@ -2,6 +2,7 @@
 
 #include "SceneClasses/GameObject.h"
 #include "Components/TransformComponent.h"
+#include "SceneClasses/Scene.h"
 
 using namespace Engine;
 
@@ -12,28 +13,6 @@ void CameraComponent::RotateCamera(Vector3 rot, bool isDegrees)
 	m_Roll -= rot.y;
 
 	m_Transform->Rotate(m_Roll, m_Pitch, m_Yaw,isDegrees);
-}
-
-void CameraComponent::Update()
-{
-	if(m_MarkedForScreenUpdate)
-	{
-		ChangeProjection();
-		m_MarkedForScreenUpdate = false;
-	}
-
-	if(!m_Transform)
-	{
-		return;
-	}
-
-	const Vector3 camPos{ m_Transform->GetWorldPosition() };
-
-	const Vector3 lookAt{ camPos + m_Transform->GetForward() };
-	m_View = XMMatrixLookAtRH(camPos, lookAt, Vector3::Up);
-	m_ViewInverse = XMMatrixInverse(nullptr, m_View);
-	m_ViewProj = m_View * m_Proj;
-	m_ViewProjInverse = XMMatrixInverse(nullptr, m_ViewProj);
 }
 
 void CameraComponent::ChangeProjection()
@@ -48,7 +27,7 @@ void CameraComponent::ChangeProjection()
 
 }
 
-void CameraComponent::Initialize()
+void CameraComponent::Initialize(Scene* pScene)
 {
 	const GameObject* owner{ GetOwner() };
 
@@ -59,6 +38,28 @@ void CameraComponent::Initialize()
 	}
 
 	m_Transform = owner->GetTransform();
+
+	pScene->AddUpdateCallback([&](const Scene*)
+		{
+			if (m_MarkedForScreenUpdate)
+			{
+				ChangeProjection();
+				m_MarkedForScreenUpdate = false;
+			}
+
+			if (!m_Transform)
+			{
+				return;
+			}
+
+			const Vector3 camPos{ m_Transform->GetWorldPosition() };
+
+			const Vector3 lookAt{ camPos + m_Transform->GetForward() };
+			m_View = XMMatrixLookAtRH(camPos, lookAt, Vector3::Up);
+			m_ViewInverse = XMMatrixInverse(nullptr, m_View);
+			m_ViewProj = m_View * m_Proj;
+			m_ViewProjInverse = XMMatrixInverse(nullptr, m_ViewProj);
+		});
 }
 
 void CameraComponent::MoveCamera(const Vector3 pos)
