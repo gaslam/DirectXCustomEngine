@@ -9,7 +9,7 @@ namespace Exe
 		m_pCircle = AddChild(new Circle{ 5,L"earth.bmp" });
 
 		AddUpdateCallback(
-			[&]()
+			[&](const Scene*)
 			{
 				auto timer{ Locator::GetTimer() };
 

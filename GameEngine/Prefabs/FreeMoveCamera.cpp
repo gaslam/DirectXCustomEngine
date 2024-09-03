@@ -19,7 +19,7 @@ void FreeMoveCamera::Initialize(Scene* pScene)
 	input->BindButtonsToInput(0, CAMERA_RIGHT_CONTROL,rightKey);
 	ChangeTag(L"MovingCamera");
 
-	pScene->AddUpdateCallback([&]
+	pScene->AddUpdateCallback([&](const Scene*)
 	{
 			UpdateCameraMovement();
 	});

@@ -27,7 +27,12 @@ namespace Engine
 		{
 			for (const auto& callback : m_pUpdateCallbacks)
 			{
-				callback();
+				callback(this);
+			}
+
+			for (const auto& callback : m_pFixedUpdateCallbacks)
+			{
+				callback(this);
 			}
 		};
 		virtual void OnSceneDeactivated() {};
@@ -38,8 +43,8 @@ namespace Engine
 		[[nodiscard]] const CameraComponent* GetActiveCamera() const { return m_pActiveCamera; }
 
 		void AddInitializerCallback(const std::function<void(const Scene*)>& callback) { m_pInitializerCallbacks.emplace_back(callback); }
-		void AddUpdateCallback(const std::function<void()>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
-		void AddFixedUpdateCallback(const std::function<void()>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
+		void AddUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
+		void AddFixedUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pFixedUpdateCallbacks.emplace_back(callback); }
 
 	protected:
 		virtual void Initialize();
@@ -64,8 +69,8 @@ namespace Engine
 		CameraComponent* m_pDefaultCamera{};
 
 		std::vector<std::function<void(const Scene*)>> m_pInitializerCallbacks{};
-		std::vector<std::function<void()>> m_pUpdateCallbacks{};
-		std::vector<std::function<void()>> m_pFixedUpdateCallbacks{};
+		std::vector<std::function<void(const Scene*)>> m_pUpdateCallbacks{};
+		std::vector<std::function<void(const Scene*)>> m_pFixedUpdateCallbacks{};
 		std::vector<std::unique_ptr<GameObject>> m_pChildren{};
 		bool m_ImGuiVisible{ true };
 	};

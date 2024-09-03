@@ -65,7 +65,7 @@ void Circle::Initialize(Scene* pScene)
 		Logger::LogError(wErrorMessage);
 	}
 
-	pScene->AddUpdateCallback([this]
+	pScene->AddUpdateCallback([this](const Scene*)
 		{
 			ResizeSphere();
 		});
