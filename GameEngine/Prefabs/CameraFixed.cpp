@@ -4,7 +4,7 @@
 
 using namespace Engine;
 
-void CameraFixed::Initialize()
+void CameraFixed::Initialize(Scene*)
 {
 	AddComponent<CameraComponent>();
 	ChangeTag(L"FixedCamera");

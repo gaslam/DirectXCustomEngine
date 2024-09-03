@@ -33,9 +33,9 @@ void Cube::SetScale(float width, float height, float depth)
 	SetScale(scale);
 }
 
-void Cube::Initialize()
+void Cube::Initialize(Scene* pScene)
 {
-	Shape::Initialize();
+	Shape::Initialize(pScene);
 
 	SetDimensions(m_Dimensions);
 }

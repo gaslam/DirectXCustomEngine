@@ -19,8 +19,6 @@ namespace Exe
 
 		void Initialize() override;
 
-		void Update() override;
-
 	private:
 		Circle* m_pCircle{};
 	};

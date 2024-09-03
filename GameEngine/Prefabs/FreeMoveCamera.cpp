@@ -2,9 +2,10 @@
 #include "FreeMoveCamera.h"
 #include "Components/CameraComponent.h"
 #include "Managers/InputManager.h"
+#include "SceneClasses/Scene.h"
 #include "Utils/Locator.h"
 
-void FreeMoveCamera::Initialize()
+void FreeMoveCamera::Initialize(Scene* pScene)
 {
 	m_pComponent = AddComponent<CameraComponent>();
 	const auto input{ InputManager::GetInstance() };
@@ -17,11 +18,11 @@ void FreeMoveCamera::Initialize()
 	input->BindButtonsToInput(0, CAMERA_BACKWARD_CONTROL,backKey);
 	input->BindButtonsToInput(0, CAMERA_RIGHT_CONTROL,rightKey);
 	ChangeTag(L"MovingCamera");
-}
 
-void FreeMoveCamera::Update()
-{
-	UpdateCameraMovement();
+	pScene->AddUpdateCallback([&]
+	{
+			UpdateCameraMovement();
+	});
 }
 
 void FreeMoveCamera::RenderImGui()

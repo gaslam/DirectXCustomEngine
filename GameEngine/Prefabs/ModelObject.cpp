@@ -2,7 +2,7 @@
 
 #include "Components/Meshes/ModelRenderComponent.h"
 
-void ModelObject::Initialize()
+void ModelObject::Initialize(Scene*)
 {
 	m_pMesh = AddComponent<ModelRenderComponent>(m_ModelFilePath);
 }

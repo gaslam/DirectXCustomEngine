@@ -6,7 +6,7 @@ namespace Engine
         public GameObject
     {
     public:
-        void Initialize() override;
+        void Initialize(Scene*) override;
     };
 }
 

@@ -23,7 +23,13 @@ namespace Engine
 		void RootInitialize();
 		void RootInitDeviceResources() const;
 		virtual void InitDeviceResources(){};
-		void RootUpdate();
+		void Update() const
+		{
+			for (const auto& callback : m_pUpdateCallbacks)
+			{
+				callback();
+			}
+		};
 		virtual void OnSceneDeactivated() {};
 		virtual void OnSceneActivated() {};
 		void RootOnDeviceLost();
@@ -31,12 +37,15 @@ namespace Engine
 		[[nodiscard]]std::wstring GetName() const { return m_Name; }
 		[[nodiscard]] const CameraComponent* GetActiveCamera() const { return m_pActiveCamera; }
 
+		void AddInitializerCallback(const std::function<void(const Scene*)>& callback) { m_pInitializerCallbacks.emplace_back(callback); }
+		void AddUpdateCallback(const std::function<void()>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
+		void AddFixedUpdateCallback(const std::function<void()>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
+
 	protected:
 		virtual void Initialize();
 		virtual void Render(){};
 		virtual void PostRender(){};
 		virtual void RenderImGui() {};
-		virtual void Update(){};
 
 		template
 		<typename Object>
@@ -54,6 +63,9 @@ namespace Engine
 		CameraComponent* m_pActiveCamera{};
 		CameraComponent* m_pDefaultCamera{};
 
+		std::vector<std::function<void(const Scene*)>> m_pInitializerCallbacks{};
+		std::vector<std::function<void()>> m_pUpdateCallbacks{};
+		std::vector<std::function<void()>> m_pFixedUpdateCallbacks{};
 		std::vector<std::unique_ptr<GameObject>> m_pChildren{};
 		bool m_ImGuiVisible{ true };
 	};

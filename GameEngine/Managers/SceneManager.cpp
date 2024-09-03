@@ -15,7 +15,7 @@ void SceneManager::Update() const
 {
 	if (m_pActiveScene)
 	{
-		m_pActiveScene->RootUpdate();
+		m_pActiveScene->Update();
 	}
 }
 

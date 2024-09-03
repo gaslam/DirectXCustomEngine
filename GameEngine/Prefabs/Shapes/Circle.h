@@ -25,8 +25,7 @@ public:
 	float GetDiameter() const { return m_Diameter; }
 
 protected:
-	void Initialize() override;
-	void Update() override;
+	void Initialize(Scene*) override;
 private:
 	void ResizeSphere();
 	float m_Diameter{ 5.f };

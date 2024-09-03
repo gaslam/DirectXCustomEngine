@@ -174,13 +174,13 @@ namespace Engine
 		[[nodiscard]] TransformComponent* GetTag() const { return m_pTransform; }
 
 	protected:
-		void RootInitialize()
+		void RootInitialize(Scene* pScene)
 		{
 			if (m_Initialized)
 			{
 				return;
 			}
-			Initialize();
+			Initialize(pScene);
 			for (const auto& pComponent : m_pComponents | views::values)
 			{
 				pComponent->Initialize();
@@ -188,7 +188,7 @@ namespace Engine
 
 			for (const auto& pChild : m_pChildren)
 			{
-				pChild->RootInitialize();
+				pChild->RootInitialize(pScene);
 			}
 
 			m_Initialized = true;
@@ -214,7 +214,7 @@ namespace Engine
 			m_DeviceRcInitialized = true;
 		}
 
-		virtual void Initialize() {};
+		virtual void Initialize(Scene*) {};
 		virtual void InitDeviceResources() {};
 
 		virtual void RootOnScreensizeChanged(const int width, const int height)
@@ -230,25 +230,6 @@ namespace Engine
 				pChild->RootOnScreensizeChanged(width, height);
 			}
 		};
-
-		void RootUpdate()
-		{
-			for (const auto& val : m_pComponents | views::values)
-			{
-				val->Update();
-			}
-			for (const auto& pChild : m_pChildren)
-			{
-				pChild->RootUpdate();
-			}
-
-			Update();
-		}
-
-		virtual void Update()
-		{
-
-		}
 
 		virtual void OnScreensizeChanged(const int, const int)
 		{

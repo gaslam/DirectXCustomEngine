@@ -13,7 +13,7 @@ void GameObject::RootSceneAttach(Scene* pScene)
 	m_pParentScene = pScene;
 
 
-	RootInitialize();
+	RootInitialize(pScene);
 
 	OnSceneAttach(m_pParentScene);
 

@@ -41,7 +41,7 @@ public:
 	void SetScale(Vector3& scale);
 	void SetScale(float width, float height, float depth);
 protected:
-	void Initialize() override;
+	void Initialize(Scene*) override;
 private:
 	Vector3 m_Dimensions{};
 	Color m_Color{};

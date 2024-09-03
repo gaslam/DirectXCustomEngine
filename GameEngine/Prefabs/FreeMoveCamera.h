@@ -14,11 +14,10 @@ class FreeMoveCamera :
 {
 public:
 
-    void Initialize() override;
+    void Initialize(Scene*) override;
     void SetMovementSpeed(const float speed) { m_MovementSpeed = speed; }
 
 protected:
-    void Update() override;
     void RenderImGui() override;
 private:
     float m_MovementSpeed{10.f};

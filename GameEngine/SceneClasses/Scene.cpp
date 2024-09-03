@@ -67,16 +67,6 @@ void Scene::RootInitDeviceResources() const
 	}
 }
 
-void Scene::RootUpdate()
-{
-	Update();
-
-	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
-	{
-		pChild->RootUpdate();
-	}
-}
-
 void Scene::RootOnDeviceLost()
 {
 	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
@@ -89,6 +79,6 @@ void Scene::Initialize()
 {
 	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
 	{
-		pChild->RootInitialize();
+		pChild->RootInitialize(this);
 	}
 }

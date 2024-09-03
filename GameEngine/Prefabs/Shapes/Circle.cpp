@@ -3,6 +3,7 @@
 #include "Utils/GameHandler.h"
 #include "Utils/Locator.h"
 #include "Utils/Utils.h"
+#include "SceneClasses/Scene.h"
 
 void Circle::RenderImGui()
 {
@@ -25,13 +26,6 @@ void Circle::SetDiameter(float diameter)
 	m_IsMarkedForResize = true;
 }
 
-void Circle::Update()
-{
-	if (m_IsMarkedForResize)
-	{
-		ResizeSphere();
-	}
-}
 
 void Circle::ResizeSphere()
 {
@@ -47,17 +41,15 @@ void Circle::ResizeSphere()
 
 	pTransform->SetScale(m_Diameter);
 
-	/*const GameHandlerBase* pGameHandler{ Locator::GetGameHandler() };
-	MeshRenderComponent* pMesh{ GetMesh() };
+	const GameHandlerBase* pGameHandler{ Locator::GetGameHandler() };
 	auto newSphere = GeometricPrimitive::CreateSphere(m_Diameter, 16, true, false, pGameHandler->GetDevice());
 	m_pSphere.swap(newSphere);
-	pMesh->SetShape(m_pSphere);
-	m_IsMarkedForResize = false;*/
+	m_IsMarkedForResize = false;
 }
 
-void Circle::Initialize()
+void Circle::Initialize(Scene* pScene)
 {
-	Shape::Initialize();
+	Shape::Initialize(pScene);
 	ChangeTag(L"Circle");
 	SetDiameter(m_Diameter);
 
@@ -72,4 +64,9 @@ void Circle::Initialize()
 		const auto wErrorMessage{ StringUtils::EncodeUTF8(e.what()) };
 		Logger::LogError(wErrorMessage);
 	}
+
+	pScene->AddUpdateCallback([this]
+		{
+			ResizeSphere();
+		});
 }

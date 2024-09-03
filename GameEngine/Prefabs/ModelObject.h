@@ -12,7 +12,7 @@ public:
 
     };
 protected:
-    void Initialize() override;
+    void Initialize(Scene*) override;
     ModelRenderComponent* GetMesh() const { return m_pMesh; }
 private:
     const std::wstring m_ModelFilePath{};

@@ -13,7 +13,7 @@ public:
 	};
     virtual ~Shape() override = default;
 protected:
-    void Initialize() override;
+    void Initialize(Scene*) override;
     ShapeRenderComponent* GetMesh() const { return m_pMesh; }
     virtual void RenderImGui() override{}
 private:
