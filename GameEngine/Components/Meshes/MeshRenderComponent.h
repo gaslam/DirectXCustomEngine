@@ -13,7 +13,6 @@ public:
 	virtual ~MeshRenderComponent() override = default;
 	virtual void Initialize(Scene* pScene) override;
 	virtual void InitDeviceResources() override;
-	virtual void Render() override = 0;
 	virtual void OnDeviceLost() override;
 
 

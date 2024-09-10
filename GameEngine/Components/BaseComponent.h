@@ -20,7 +20,6 @@ namespace Engine
 		virtual void Initialize(Scene*) = 0;
 		virtual void PostInitialize() {}
 		virtual void InitDeviceResources(){}
-		virtual void Render() {}
 		virtual void ShadowMapRender() {}
 		virtual void PostRender() {}
 		virtual void OnEntityAttach(GameObject* /*pOwner*/) {}

@@ -119,18 +119,6 @@ namespace Engine
 			}
 		}
 
-		void Render() const
-		{
-			for (const auto& val : m_pComponents | views::values)
-			{
-				val->Render();
-			}
-			for (const auto& pChild : m_pChildren)
-			{
-				pChild->Render();
-			}
-		}
-
 		void PostRender() const
 		{
 			for (const auto& val : m_pComponents | views::values)

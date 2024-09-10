@@ -56,46 +56,35 @@ void ModelRenderComponent::InitDeviceResources()
 	m_ModelNormal = m_pModel->CreateEffects(*m_pFxFactory, pd, pd);
 }
 
-void ModelRenderComponent::Render()
+void ModelRenderComponent::Initialize(Scene* pScene)
 {
-	const GameHandlerBase* pHandler{ Locator::GetGameHandler() };
-	const DeviceResources* pDeviceResources{ pHandler->GetDeviceResources() };
-	const auto pCommandList{ pDeviceResources->GetCommandList() };
-	const CommonStates* pStates{ GetStates() };
-
-	const GameObject* pOwner{ GetOwner() };
-	if (!pOwner)
+	pScene->AddRenderCallback([&](const Scene* pScene)->void
 	{
-		Logger::LogError(L"Cannot get component owner!!");
-		return;
-	}
+			const GameHandlerBase* pHandler{ Locator::GetGameHandler() };
+			const DeviceResources* pDeviceResources{ pHandler->GetDeviceResources() };
+			const auto pCommandList{ pDeviceResources->GetCommandList() };
+			const CommonStates* pStates{ GetStates() };
 
-	const Scene* pParentScene{ pOwner->GetParentScene() };
-	if (!pParentScene)
-	{
-		Logger::LogError(L"Cannot get object parent scene!!");
-		return;
-	}
+			const TransformComponent* pTransform{ GetTransform() };
+			if (!pTransform)
+			{
+				Logger::LogWarning(L"Cannot transform object!!");
+				return;
+			}
 
-	const TransformComponent* pTransform{ GetTransform() };
-	if (!pTransform)
-	{
-		Logger::LogWarning(L"Cannot transform object!!");
-		return;
-	}
+			const CameraComponent* pCamera{ pScene->GetActiveCamera() };
 
-	const CameraComponent* pCamera{ pParentScene->GetActiveCamera() };
+			const Matrix view{ pCamera->GetViewMatrix() };
+			const Matrix proj{ pCamera->GetProjectionMatrix() };
+			const Matrix world{ pTransform->GetWorldMatrix() };
 
-	const Matrix view{ pCamera->GetViewMatrix() };
-	const Matrix proj{ pCamera->GetProjectionMatrix() };
-	const Matrix world{ pTransform->GetWorldMatrix() };
+			ID3D12DescriptorHeap* heaps[] = { m_pModelResources->Heap(), pStates->Heap() };
+			pCommandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
 
-	ID3D12DescriptorHeap* heaps[] = { m_pModelResources->Heap(), pStates->Heap() };
-	pCommandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
+			Model::UpdateEffectMatrices(m_ModelNormal, world, view, proj);
 
-	Model::UpdateEffectMatrices(m_ModelNormal, world, view, proj);
-
-	m_pModel->Draw(pCommandList, m_ModelNormal.cbegin());
+			m_pModel->Draw(pCommandList, m_ModelNormal.cbegin());
+	});
 }
 
 void ModelRenderComponent::OnDeviceLost()

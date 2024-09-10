@@ -6,7 +6,7 @@ class ShapeRenderComponent final :
 public:
     explicit ShapeRenderComponent(const std::wstring& dir = L"") : MeshRenderComponent(dir) {};
     void SetShape(std::unique_ptr<GeometricPrimitive>& shape);
-    void Render() override;
+	void Initialize(Scene* pScene) override;
     void InitDeviceResources() override;
     void OnDeviceLost() override;
 

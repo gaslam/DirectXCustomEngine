@@ -23,16 +23,9 @@ void Scene::RootOnScreensizeChanged(const int width, const int height)
 
 void Scene::RootRender()
 {
-	Render();
-	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
+	for (const auto& callback : m_pRenderCallbacks)
 	{
-		pChild->Render();
-	}
-
-	PostRender();
-	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
-	{
-		pChild->PostRender();
+		callback(this);
 	}
 }
 

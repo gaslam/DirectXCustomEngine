@@ -45,11 +45,10 @@ namespace Engine
 		void AddInitializerCallback(const std::function<void(const Scene*)>& callback) { m_pInitializerCallbacks.emplace_back(callback); }
 		void AddUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
 		void AddFixedUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pFixedUpdateCallbacks.emplace_back(callback); }
+		void AddRenderCallback(const std::function<void(const Scene*)>& callback) { m_pRenderCallbacks.emplace_back(callback); }
 
 	protected:
 		virtual void Initialize();
-		virtual void Render(){};
-		virtual void PostRender(){};
 		virtual void RenderImGui() {};
 
 		template
@@ -71,6 +70,7 @@ namespace Engine
 		std::vector<std::function<void(const Scene*)>> m_pInitializerCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pUpdateCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pFixedUpdateCallbacks{};
+		std::vector<std::function<void(const Scene*)>> m_pRenderCallbacks{};
 		std::vector<std::unique_ptr<GameObject>> m_pChildren{};
 		bool m_ImGuiVisible{ true };
 	};
