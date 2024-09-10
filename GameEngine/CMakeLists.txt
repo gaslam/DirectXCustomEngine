@@ -38,6 +38,7 @@ file(GLOB_RECURSE PREFAB_HEADERS "Prefabs/*.h" "Prefabs/*.cpp")
 file(GLOB_RECURSE SCENECLASS_HEADERS "SceneClasses/*.h" "SceneClasses/*.cpp")
 file(GLOB_RECURSE STRUCTS_HEADERS "Structs/*.h" "Structs/*.cpp")
 file(GLOB_RECURSE UTILS_HEADERS "Utils/*.h" "Utils/*.cpp")
+file(GLOB_RECURSE SETS_HEADERS "Sets/*.h" "Sets/*.cpp")
 
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -52,11 +53,12 @@ ${PREFAB_HEADERS}
 ${SCENECLASS_HEADERS}
 ${STRUCTS_HEADERS}
 ${UTILS_HEADERS}
+${SETS_HEADERS}
 pch.h
 StepTimer.h
 d3dx12.h
 ${IMGUI_SOURCES}
- "ECS/ECS.h" "Managers/TextureManager.h" "Managers/TextureManager.cpp")
+ "ECS/ECS.h")
 else()
 add_library(GameEngine STATIC
 ${COMMAND_HEADERS}
