@@ -57,8 +57,7 @@ ${SETS_HEADERS}
 pch.h
 StepTimer.h
 d3dx12.h
-${IMGUI_SOURCES}
- "ECS/ECS.h")
+${IMGUI_SOURCES})
 else()
 add_library(GameEngine STATIC
 ${COMMAND_HEADERS}
@@ -71,6 +70,7 @@ ${PREFAB_HEADERS}
 ${SCENECLASS_HEADERS}
 ${STRUCTS_HEADERS}
 ${UTILS_HEADERS}
+${SETS_HEADERS}
 d3dx12.h
 StepTimer.h
 pch.h
