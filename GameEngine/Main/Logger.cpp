@@ -40,7 +40,6 @@ void Logger::Initialize()
 void Logger::LogWarning(const InfoLog& info)
 {
 	HandleLog(LogLevel::WARNING, info);
-	ExitGame();
 }
 
 void Logger::LogError(const InfoLog& info)
