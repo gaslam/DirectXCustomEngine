@@ -4,7 +4,22 @@
 
 class Registry final {
 public:
-	[[nodiscard]] IComponentPool* GetComponentPool(const char* componentName) const {
+
+	template
+	<typename T>
+	void RegisterComponent(Entity entity) {
+		const auto pool{ GetComponentPool<T>() };
+
+		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool))
+		{
+			poolCasted->AddComponent(entity);
+		}
+	}
+
+	template
+	<typename T>
+	[[nodiscard]] IComponentPool* GetComponentPool() {
+		const char* componentName{ typeid(T).name()};
 		const auto found{ std::find_if(m_ComponentPools.begin(), m_ComponentPools.end(), [componentName](const std::pair<const char*, std::unique_ptr<IComponentPool>>& pair) {
 			return strcmp(pair.first, componentName) == 0;
 			}) };
@@ -12,8 +27,7 @@ public:
 		if (found != m_ComponentPools.end()) {
 			return found->second.get();
 		}
-		Logger::LogError(L"Component not found in pool");
-		return nullptr;
+		return m_ComponentPools.emplace_back(componentName, std::make_unique<ComponentPool<T>>()).second.get();
 	}
 
 private:

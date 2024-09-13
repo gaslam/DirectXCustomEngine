@@ -8,11 +8,6 @@ class IComponentPool
 public:
 	IComponentPool() = default;
 	virtual ~IComponentPool() = default;
-
-	IComponentPool(const IComponentPool&) = delete;
-	IComponentPool(IComponentPool&&) noexcept = delete;
-	IComponentPool& operator=(const IComponentPool&) = delete;
-	IComponentPool& operator=(IComponentPool&&) noexcept = delete;
 };
 
 

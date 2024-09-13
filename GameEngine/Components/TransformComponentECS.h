@@ -5,7 +5,7 @@ using namespace SimpleMath;
 
 namespace Engine
 {
-	struct TransformComponentECS
+	class TransformComponentECS final
 	{
 		Vector3 m_WorldPosition{};
 		Vector3 m_WorldScale{ 1.f,1.f,1.f };
