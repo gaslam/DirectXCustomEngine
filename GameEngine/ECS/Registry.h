@@ -74,6 +74,16 @@ public:
 		}
 	}
 
+	template
+		<typename T>
+		[[nodiscard]] bool HasComponent() const
+	{
+		const char* componentName{ typeid(T).name() };
+		return std::any_of(m_ComponentPools.begin(), m_ComponentPools.end(), [componentName](const std::pair<const char*, std::unique_ptr<IComponentPool>>& pair) {
+			return strcmp(pair.first, componentName) == 0;
+			});
+	}
+
 private:
 	std::vector<std::pair<const char*, std::unique_ptr<IComponentPool>>> m_ComponentPools;
 };
