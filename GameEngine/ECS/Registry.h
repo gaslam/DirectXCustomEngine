@@ -44,8 +44,34 @@ public:
 		return m_ComponentPools.emplace_back(componentName, std::make_unique<ComponentPool<T>>()).second.get();
 	}
 
-	[[nodiscard]] std::vector<std::pair<const char*, std::unique_ptr<IComponentPool>>> GetComponentPools() const {
-		return m_ComponentPools;
+	template
+	<typename T>
+	void RemoveComponentEntity(Entity entity) {
+		auto pool{ GetComponentPool<T>() };
+
+		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool))
+		{
+			poolCasted->Remove(entity);
+		}
+	}
+
+	template
+<typename T>
+	void RemoveComponent()
+	{
+		auto pool{ GetComponentPool<T>() };
+
+		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool.get())) {
+			// Clear the component pool
+			poolCasted->Clear();
+
+			// Remove the component pool entry from m_ComponentPools
+			const char* componentName = typeid(T).name();
+			m_ComponentPools.erase(std::remove_if(m_ComponentPools.begin(), m_ComponentPools.end(),
+				[componentName](const std::pair<const char*, std::unique_ptr<IComponentPool>>& pair) {
+					return strcmp(pair.first, componentName) == 0;
+				}), m_ComponentPools.end());
+		}
 	}
 
 private:
