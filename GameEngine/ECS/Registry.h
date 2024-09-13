@@ -14,6 +14,7 @@ public:
 		{
 			poolCasted->AddComponent(entity);
 		}
+		Logger::LogWarning(L"Component not found in pool");
 	}
 
 	template
