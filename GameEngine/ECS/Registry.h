@@ -4,6 +4,18 @@
 
 class Registry final {
 public:
+	[[nodiscard]] IComponentPool* GetComponentPool(const char* componentName) const {
+		const auto found{ std::find_if(m_ComponentPools.begin(), m_ComponentPools.end(), [componentName](const std::pair<const char*, std::unique_ptr<IComponentPool>>& pair) {
+			return strcmp(pair.first, componentName) == 0;
+			}) };
+
+		if (found != m_ComponentPools.end()) {
+			return found->second.get();
+		}
+		Logger::LogError(L"Component not found in pool");
+		return nullptr;
+	}
+
 private:
-	std::vector<TPair<const char*, std::unique_ptr<IComponentPool>>> m_Components;
+	std::vector<std::pair<const char*, std::unique_ptr<IComponentPool>>> m_ComponentPools;
 };
