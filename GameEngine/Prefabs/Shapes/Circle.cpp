@@ -2,7 +2,7 @@
 #include "Circle.h"
 #include "Utils/GameHandler.h"
 #include "Utils/Locator.h"
-#include "Utils/Utils.h"
+#include "Utils/EngineUtils.h"
 #include "SceneClasses/Scene.h"
 
 void Circle::RenderImGui()

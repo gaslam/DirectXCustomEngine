@@ -47,19 +47,21 @@ namespace StringUtils
 
 	inline std::wstring EncodeUTF8(const std::string& value)
 	{
-		return EncodeUTF8(value);
+		const char* valueStr{ value.c_str() };
+		return EncodeUTF8(valueStr);
 	}
 
-	inline const wchar_t* EncodeUTF8(const char* value)
+	inline std::wstring EncodeUTF8(const char* value)
 	{
 		const int valueLen{ static_cast<int>(strlen(value)) };
-		if(valueLen <= 0)
+		if (valueLen <= 0)
 		{
-			return {};
+			return L"";
 		}
 		const int size_needed{ MultiByteToWideChar(CP_UTF8, 0, value, valueLen, nullptr, 0) };
-		std::wstring result(size_needed, 0);
-		MultiByteToWideChar(CP_UTF8, 0, value, valueLen, result.data(), size_needed);
-		return result.c_str();
+		wchar_t* result = new wchar_t[size_needed + 1]; // +1 for null terminator
+		MultiByteToWideChar(CP_UTF8, 0, value, valueLen, result, size_needed);
+		result[size_needed] = L'\0'; // null-terminate the string
+		return result;
 	}
 }
