@@ -25,6 +25,8 @@ using namespace DirectX;
 #ifdef _DEBUG
 #include "vld.h"
 #endif
+#include <ECS/Registry.h>
+#include <Components/TransformComponentECS.h>
 
 #ifdef USING_D3D12_AGILITY_SDK
 extern "C"
@@ -343,5 +345,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // Exit helper
 void ExitGame() noexcept
 {
+	Registry registry{};
+	Entity entity{ 0 };
+	if (!registry.HasComponent<TransformComponentECS>())
+	{
+		registry.RegisterComponent<TransformComponentECS>(entity);
+	}
+	registry.RemoveComponentEntity<TransformComponentECS>(entity);
 	PostQuitMessage(0);
 }

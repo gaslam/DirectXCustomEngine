@@ -15,10 +15,10 @@ public:
 
 	virtual void Initialize() = 0;
 
-	virtual [[nodiscard]] std::wstring GetContentRoot() const = 0;
-	virtual [[nodiscard]] DX::DeviceResources* GetDeviceResources() const = 0;
-	virtual [[nodiscard]] ID3D12Device* GetDevice() const = 0;
-	virtual [[nodiscard]] std::wstring GetWindowTitle() const = 0;
+	[[nodiscard]] virtual std::wstring GetContentRoot() const = 0;
+	[[nodiscard]] virtual DX::DeviceResources* GetDeviceResources() const = 0;
+	[[nodiscard]] virtual ID3D12Device* GetDevice() const = 0;
+	[[nodiscard]] virtual std::wstring GetWindowTitle() const = 0;
 
 	virtual void SetDeviceResources(DX::DeviceResources*) = 0;
 	virtual void SetDevice(ID3D12Device*) = 0;
@@ -36,7 +36,7 @@ public:
 	void Initialize() override {};
 
 	[[nodiscard]] std::wstring GetContentRoot() const override { return L""; }
-	virtual [[nodiscard]] std::wstring GetWindowTitle() const override { return L""; }
+	[[nodiscard]] std::wstring GetWindowTitle() const override { return L""; }
 	[[nodiscard]] DX::DeviceResources* GetDeviceResources() const override { return nullptr; }
 	[[nodiscard]] ID3D12Device* GetDevice() const override { return nullptr; }
 
