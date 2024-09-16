@@ -5,6 +5,14 @@ class ModelRenderComponent :
 {
 public:
     explicit ModelRenderComponent(const std::wstring& modelFilePath) : MeshRenderComponent(modelFilePath){}
+
+    //TODO: Fix warnings that are caused by the default constructor being deleted in base class. For now this works
+
+    ModelRenderComponent(const ModelRenderComponent& other) = delete;
+    ModelRenderComponent(ModelRenderComponent&& other) noexcept = delete;
+    ModelRenderComponent& operator=(const ModelRenderComponent& other) = delete;
+    ModelRenderComponent& operator=(ModelRenderComponent&& other) noexcept = delete;
+
     void InitDeviceResources() override;
 	void Initialize(Scene* pScene) override;
     void OnDeviceLost() override;

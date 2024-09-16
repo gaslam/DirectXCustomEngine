@@ -42,6 +42,14 @@ namespace DX
             m_qpcMaxDelta = static_cast<uint64_t>(m_qpcFrequency.QuadPart / 10);
         }
 
+        //TODO: Fix warnings that are caused by the default constructor being deleted in base class. For now this works
+        ~StepTimer() override = default;
+
+        StepTimer(const StepTimer& other) = delete;
+        StepTimer(StepTimer&& other) noexcept = delete;
+        StepTimer& operator=(const StepTimer& other) = delete;
+        StepTimer& operator=(StepTimer&& other) noexcept = delete;
+
         // Get elapsed time since the previous Update call.
         uint64_t GetElapsedTicks() const noexcept override { return m_elapsedTicks; }
         double GetElapsedSeconds() const noexcept override{ return TicksToSeconds(m_elapsedTicks); }

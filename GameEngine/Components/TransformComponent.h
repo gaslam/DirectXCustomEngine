@@ -38,6 +38,15 @@ class TransformComponent : public BaseComponent
 {
 
 public:
+	//TODO: Fix warnings that are caused by the default constructor being deleted in base class. For now this works
+	TransformComponent() = default;
+	~TransformComponent() override = default;
+
+	TransformComponent(const TransformComponent& other) = delete;
+	TransformComponent(TransformComponent&& other) noexcept = delete;
+	TransformComponent& operator=(const TransformComponent& other) = delete;
+	TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
+
 	void Initialize(Scene* pScene) override;
 	void Translate(const Vector3& translation);
 	void Translate(float x = 0.f,float y = 0.f, float z = 0.f);

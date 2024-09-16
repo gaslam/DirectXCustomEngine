@@ -14,6 +14,17 @@ class FreeMoveCamera :
 {
 public:
 
+	FreeMoveCamera() = default;
+
+    //TODO: Fix warnings that are caused by the default constructor being deleted in base class. For now this works
+
+	~FreeMoveCamera() override = default;
+
+    FreeMoveCamera(const FreeMoveCamera& other) = delete;
+    FreeMoveCamera(FreeMoveCamera&& other) noexcept = delete;
+    FreeMoveCamera& operator=(const FreeMoveCamera& other) = delete;
+    FreeMoveCamera& operator=(FreeMoveCamera&& other) noexcept = delete;
+
     void Initialize(Scene*) override;
     void SetMovementSpeed(const float speed) { m_MovementSpeed = speed; }
 

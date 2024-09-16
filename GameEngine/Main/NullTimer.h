@@ -3,8 +3,21 @@
 
 namespace DX
 {
-	class NullTimer : public Timer
+	class NullTimer final : public Timer
 	{
+	public:
+
+        // Default constructor
+        NullTimer() = default;
+
+        // Default move constructor
+        NullTimer(const NullTimer&) = delete;
+        NullTimer(NullTimer&&) noexcept = delete;
+
+        // Default move assignment operator
+        NullTimer& operator=(const NullTimer&) = delete;
+        NullTimer& operator=(NullTimer&&) noexcept = delete;
+
         // Get elapsed time since the previous Update call.
         uint64_t GetElapsedTicks() const noexcept override { return 0; };
 		double GetElapsedSeconds() const noexcept  override { return 0; };
@@ -27,13 +40,13 @@ namespace DX
         virtual  void SetTargetElapsedSeconds(double) noexcept override{}
 
 
-        virtual double TicksToSeconds(uint64_t) const noexcept { return 0; }
-        virtual uint64_t SecondsToTicks(double) const noexcept { return 0; }
+        double TicksToSeconds(uint64_t) const noexcept override { return 0; }
+        uint64_t SecondsToTicks(double) const noexcept override { return 0; }
 
         // After an intentional timing discontinuity (for instance a blocking IO operation)
         // call this to avoid having the fixed timestep logic attempt a set of catch-up
         // Update calls.
 
-        virtual void ResetElapsedTime() {};
+        virtual void ResetElapsedTime() override {};
 	};
 }

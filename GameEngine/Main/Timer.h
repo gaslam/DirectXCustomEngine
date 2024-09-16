@@ -5,7 +5,12 @@ namespace DX
     {
     public:
         Timer() = default;
-        virtual ~Timer() {};
+        virtual ~Timer() = default;
+
+		Timer(const Timer&) = delete;
+		Timer(Timer&&) noexcept = delete;
+		Timer& operator=(const Timer&) = delete;
+		Timer& operator=(Timer&&) noexcept = delete;
 
         // Get elapsed time since the previous Update call.
         virtual uint64_t GetElapsedTicks() const noexcept = 0;

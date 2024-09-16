@@ -1,7 +1,4 @@
 #pragma once
-#include "pch.h"
-#include "Main/Singleton.h"
-
 namespace Engine
 {
 	class Command

@@ -5,6 +5,14 @@ class ShapeRenderComponent final :
 {
 public:
     explicit ShapeRenderComponent(const std::wstring& dir = L"") : MeshRenderComponent(dir) {};
+    //TODO: Fix warnings that are caused by the default constructor being deleted in base class. For now this works
+    ~ShapeRenderComponent() override = default;
+
+    ShapeRenderComponent(const ShapeRenderComponent& other) = delete;
+    ShapeRenderComponent(ShapeRenderComponent&& other) noexcept = delete;
+    ShapeRenderComponent& operator=(const ShapeRenderComponent& other) = delete;
+    ShapeRenderComponent& operator=(ShapeRenderComponent&& other) noexcept = delete;
+
     void SetShape(std::unique_ptr<GeometricPrimitive>& shape);
 	void Initialize(Scene* pScene) override;
     void InitDeviceResources() override;
