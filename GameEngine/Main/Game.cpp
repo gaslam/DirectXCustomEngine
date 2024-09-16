@@ -16,7 +16,7 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 using namespace DX;
 
-Game::Game() noexcept(false) : m_pSceneManager{ Engine::SceneManager::GetInstance() }, m_pRenderer{ std::make_unique<Renderer>() },m_pTimer{new StepTimer{}}
+Game::Game() noexcept(false) : m_pTimer{new StepTimer{}}, m_pSceneManager{ Engine::SceneManager::GetInstance() },m_pRenderer{ std::make_unique<Renderer>() }
 {
     GameHandler* pHandler{ new GameHandler() };
     Locator::Provide(std::unique_ptr<GameHandler>(pHandler));
