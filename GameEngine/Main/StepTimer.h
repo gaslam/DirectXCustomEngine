@@ -75,8 +75,11 @@ namespace DX
         void SetTargetElapsedSeconds(double targetElapsed) noexcept override { m_targetElapsedTicks = SecondsToTicks(targetElapsed); }
 
 
+#pragma warning( push )
+#pragma warning( disable: 5219 )
         double TicksToSeconds(uint64_t ticks) const noexcept override { return static_cast<double>(ticks) / TicksPerSecond; }
         uint64_t SecondsToTicks(double seconds) const noexcept override { return static_cast<uint64_t>(seconds * TicksPerSecond); }
+#pragma warning( pop )
 
         // After an intentional timing discontinuity (for instance a blocking IO operation)
         // call this to avoid having the fixed timestep logic attempt a set of catch-up
