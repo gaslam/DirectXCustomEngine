@@ -20,6 +20,6 @@ namespace Exe
 		void Initialize() override;
 
 	private:
-		Circle* m_pCircle{};
+		//Circle* m_pCircle{};
 	};
 }

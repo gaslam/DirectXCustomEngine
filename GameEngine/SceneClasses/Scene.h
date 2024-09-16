@@ -51,16 +51,6 @@ namespace Engine
 		virtual void Initialize();
 		virtual void RenderImGui() {};
 
-		template
-		<typename Object>
-		std::enable_if_t<std::is_base_of_v<GameObject,Object>,Object*> AddChild(Object* object) noexcept
-		{
-			std::unique_ptr<GameObject> pObject{ std::unique_ptr<GameObject>(object) };
-			pObject->RootSceneAttach(this);
-			m_pChildren.emplace_back(move(pObject));
-			return object;
-		}
-
 	private:
 		const std::wstring m_Name{};
 
@@ -71,7 +61,6 @@ namespace Engine
 		std::vector<std::function<void(const Scene*)>> m_pUpdateCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pFixedUpdateCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pRenderCallbacks{};
-		std::vector<std::unique_ptr<GameObject>> m_pChildren{};
 		bool m_ImGuiVisible{ true };
 	};
 }
