@@ -1,11 +1,10 @@
-
 #include "pch.h"
 #include <Core/Renderer.h>
 #include <wrl/wrappers/corewrappers.h>
 
-#include "../Utils/SceneUtils.h"
-#include "../Commands/QuitCommand.h"
-#include "../Commands/ChangeMouseCommand.h"
+#include "Utils/SceneUtils.h"
+#include "Commands/QuitCommand.h"
+#include "Commands/ChangeMouseCommand.h"
 #include "Main/Game.h"
 #include "Managers/SceneManager.h"
 #include "Managers/InputManager.h"

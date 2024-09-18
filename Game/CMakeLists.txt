@@ -39,17 +39,20 @@ endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
 add_executable(GameExe WIN32
-Main/Main.cpp
+Main.cpp
 Utils/SceneUtils.h
 Scene/TestScene.h
 ${IMGUI_SOURCES} "Commands/ChangeMouseCommand.h"  "Scene/TestScene.cpp")
 else()
 add_executable(GameExe WIN32
-Main/Main.cpp
+Main.cpp
 Utils/SceneUtils.h
 Scene/TestScene.cpp
  "Commands/QuitCommand.h" )
 endif()
+
+target_include_directories(GameExe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Scene)
+
 if(MSVC)
     target_compile_options(GameExe PRIVATE /Wall /EHsc /GR "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")
     target_link_options(GameExe PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>" /DYNAMICBASE /NXCOMPAT)

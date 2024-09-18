@@ -1,6 +1,6 @@
 #pragma once
 #include "Managers/SceneManager.h"
-#include "../Scene/TestScene.h"
+#include "Scene/TestScene.h"
 // I am planning to replace this with a file reader
 
 namespace SceneUtils
