@@ -4,7 +4,7 @@
 
 namespace Exe
 {
-	class TestScene final: public Engine::Scene
+	class TestScene final: public EntityEngine::Scene
 	{
 	public:
 		explicit TestScene(const std::wstring& name) : Scene(name)

@@ -1,7 +1,7 @@
 #pragma once
 #include "Managers/InputManager.h"
 
-using namespace Engine;
+using namespace EntityEngine;
 class ChangeMouseCommand : public Command {
 public:
 

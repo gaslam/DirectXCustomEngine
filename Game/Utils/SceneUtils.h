@@ -7,7 +7,7 @@ namespace SceneUtils
 {
 	inline void LoadScenes()
 	{
-		Engine::SceneManager* pSceneManager{Engine::SceneManager::GetInstance()};
+		EntityEngine::SceneManager* pSceneManager{EntityEngine::SceneManager::GetInstance()};
 		pSceneManager->AddScene(std::make_unique<Exe::TestScene>(L"TestScene"));
 		pSceneManager->SetScene(0);
 	}

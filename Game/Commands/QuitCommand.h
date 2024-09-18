@@ -2,7 +2,7 @@
 #include "Command/Command.h"
 
 extern void ExitGame() noexcept;
-class QuitCommand : public Engine::Command {
+class QuitCommand : public EntityEngine::Command {
 public:
 	explicit QuitCommand() = default;
 

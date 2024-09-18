@@ -23,15 +23,15 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
 endif()
 
-project("GameEngineCMAKE")
+project("EntityEngineCMAKE")
 
-add_subdirectory("GameEngine")
+add_subdirectory("EntityEngine")
 add_subdirectory("Game")
 add_subdirectory("Benchmarks")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/ThirdParty/ImGui ${CMAKE_BINARY_DIR}/bin/IMGUI)
 target_link_libraries(GameExe PRIVATE IMGUI)
-target_link_libraries(GameEngine PUBLIC IMGUI)
+target_link_libraries(EntityEngine PUBLIC IMGUI)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_subdirectory(${CMAKE_SOURCE_DIR}/ThirdParty/vld)
@@ -40,9 +40,9 @@ add_custom_target(prebuild ALL
 target_include_directories(GameExe PRIVATE "${VLD_H}")
 add_dependencies(GameExe prebuild)
 target_link_libraries(GameExe PRIVATE "${VLD}")
-target_include_directories(GameEngine PRIVATE "${VLD_H}")
-target_link_libraries(GameEngine PRIVATE "${VLD}")
+target_include_directories(EntityEngine PRIVATE "${VLD_H}")
+target_link_libraries(EntityEngine PRIVATE "${VLD}")
 endif()
 
-target_link_libraries(GameExe PRIVATE GameEngine)
+target_link_libraries(GameExe PRIVATE EntityEngine)
 

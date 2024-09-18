@@ -111,7 +111,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		GetClientRect(hwnd, &rc);
 		g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-		const auto input{ Engine::InputManager::GetInstance() };
+		const auto input{ EntityEngine::InputManager::GetInstance() };
 		input->BindButtonsToCommand(0, NONE, Keyboard::Keys::Escape, GamePad::ButtonStateTracker::ButtonState::PRESSED, new QuitCommand{});
 		input->BindButtonsToCommand(0, NONE, Keyboard::Keys::I, GamePad::ButtonStateTracker::ButtonState::PRESSED, new ChangeMouseCommand{});
 	}
@@ -132,9 +132,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 
 	g_game.reset();
-	const auto pSceneManager{ Engine::SceneManager::GetInstance() };
-	const auto pInputManager{ Engine::InputManager::GetInstance() };
-	const auto pTextureManager{ Engine::TextureManager::GetInstance() };
+	const auto pSceneManager{ EntityEngine::SceneManager::GetInstance() };
+	const auto pInputManager{ EntityEngine::InputManager::GetInstance() };
+	const auto pTextureManager{ EntityEngine::TextureManager::GetInstance() };
 	const auto pLogger{ Logger::GetInstance() };
 	pSceneManager->Destroy();
 	pInputManager->Destroy();
