@@ -21,12 +21,6 @@ namespace EntityEngine
 		std::vector<T> m_Components{};
 
 	public:
-		T& AddComponent(Entity entity)
-		{
-			m_Entities.Insert(entity);
-			return m_Components.emplace_back(T{});
-		}
-
 
 		template <typename... Args>
 		T& AddComponent(Entity entity, Args&&... args)

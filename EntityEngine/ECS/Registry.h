@@ -6,13 +6,13 @@ class Registry final {
 public:
 
 	template
-	<typename T>
-	T* RegisterComponent(Entity entity) {
+	<typename T,typename... Args>
+	T* RegisterComponent(Entity entity,Args&&... args) {
 		const auto pool{ GetComponentPool<T>() };
 
 		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool))
 		{
-			return &poolCasted->AddComponent(entity);
+			return &poolCasted->AddComponent(entity,std::forward<Args>(args)...);
 		}
 		Logger::LogWarning(L"Component not found in pool");
 		return nullptr;
@@ -71,6 +71,8 @@ public:
 		auto pool{ GetComponentPool<T>() };
 
 		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool.get())) {
+
+			m_EntityCounter -= poolCasted->GetEntityCount();
 			// Clear the component pool
 			poolCasted->Clear();
 

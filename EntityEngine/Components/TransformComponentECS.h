@@ -14,6 +14,15 @@ namespace EntityEngine
 		Vector4 m_LocalRotation{ m_WorldRotation };
 
 	public:
+
+		TransformComponentECS(const Vector3& worldPos = {}, const Vector3& rotation = {}, const Vector3& scale = {1.f,1.f,1.f},const Vector3& forward = {}) :
+			m_WorldPosition(worldPos),
+			m_WorldScale(scale),
+			m_WorldRotation(rotation),
+			m_Forward(forward)
+		{
+		}
+
 		void SetWorldPosition(const Vector3& worldPosition)
 		{
 			m_WorldPosition = worldPosition;

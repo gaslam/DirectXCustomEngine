@@ -15,8 +15,9 @@ namespace Exe
 				for (unsigned int i = 0; i < 100000; i++)
 				{
 					const Entity entity{ registry->CreateEntity() };
-					const auto pComp{ registry->RegisterComponent<TransformComponentECS>(entity) };
-					pComp->SetForward(forward);
+
+					//Args: Entity,WorldPosition,Rotation,Scale,Forward
+					registry->RegisterComponent<TransformComponentECS>(entity,Vector3{},Vector3{1.f,1.f,1.f},forward);
 				}
 			});
 
