@@ -7,16 +7,25 @@ public:
 
 	template
 	<typename T>
-	void RegisterComponent(Entity entity) {
+	T* RegisterComponent(Entity entity) {
 		const auto pool{ GetComponentPool<T>() };
 
 		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool))
 		{
-			poolCasted->AddComponent(entity);
+			return &poolCasted->AddComponent(entity);
 		}
 		Logger::LogWarning(L"Component not found in pool");
+		return nullptr;
 	}
 
+
+	[[nodiscard]] Entity CreateEntity() {
+		return m_EntityCounter++;
+	}
+
+	[[nodiscard]] Entity GetEntityCount() const {
+		return m_EntityCounter;
+	}
 	template
 	<typename T>
 	[[nodiscard]] IComponentPool* GetComponentPool() {
@@ -85,5 +94,7 @@ public:
 	}
 
 private:
+
+	Entity m_EntityCounter{ 0 };
 	std::vector<std::pair<const char*, std::unique_ptr<IComponentPool>>> m_ComponentPools;
 };

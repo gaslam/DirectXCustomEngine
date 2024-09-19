@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Components/CameraComponent.h"
+#include "ECS/Registry.h"
 
 namespace EntityEngine
 {
@@ -46,6 +47,7 @@ namespace EntityEngine
 		void AddUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
 		void AddFixedUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pFixedUpdateCallbacks.emplace_back(callback); }
 		void AddRenderCallback(const std::function<void(const Scene*)>& callback) { m_pRenderCallbacks.emplace_back(callback); }
+		[[nodiscard]] Registry* GetRegistry() const { return m_pRegistry.get(); }
 
 	protected:
 		virtual void Initialize();
@@ -61,6 +63,8 @@ namespace EntityEngine
 		std::vector<std::function<void(const Scene*)>> m_pUpdateCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pFixedUpdateCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pRenderCallbacks{};
+
+		std::unique_ptr<Registry> m_pRegistry{ std::make_unique<Registry>() };
 		bool m_ImGuiVisible{ true };
 	};
 }

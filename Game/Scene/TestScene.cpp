@@ -1,27 +1,50 @@
 #include "TestScene.h"
-#include "Prefabs/ModelObject.h"
-#include "Prefabs/Shapes/Circle.h"
+
+#include "Components/TransformComponentECS.h"
 
 namespace Exe
 {
 	void TestScene::Initialize()
 	{
-		//m_pCircle = AddChild(new Circle{ 5,L"earth.bmp" });
 
-		//AddUpdateCallback(
-		//	[&](const Scene*)
-		//	{
-		//		auto timer{ Locator::GetTimer() };
+		AddInitializerCallback(
+			[](const Scene* scene)
+			{
+				const auto registry{ scene->GetRegistry() };
+				constexpr Vector3 forward{ 1.f,1.f,0.f };
+				for (unsigned int i = 0; i < 100000; i++)
+				{
+					const Entity entity{ registry->CreateEntity() };
+					const auto pComp{ registry->RegisterComponent<TransformComponentECS>(entity) };
+					pComp->SetForward(forward);
+				}
+			});
 
-		//		auto pTransform{ m_pCircle->GetTransform() };
-		//		if (pTransform)
-		//		{
-		//			const double rotationSpeed{ 0.5f };
-		//			const double elapsedTime{ timer->GetElapsedSeconds() };
-		//			const double angle{ rotationSpeed * elapsedTime };
-		//			const float angleFl{ static_cast<float>(angle) };
-		//			pTransform->Rotate({ 0,angleFl,0 });
-		//		}
-		//	});
+		AddUpdateCallback({
+			[this](const Scene* scene)
+			{
+				const auto registry{ scene->GetRegistry() };
+				const auto pool{ static_cast<ComponentPool<TransformComponentECS>*>(registry->GetComponentPool<TransformComponentECS>()) };
+
+				for (size_t i = 0; i < pool->GetComponentCount(); i++)
+				{
+					auto& transformComponent{ pool->GetComponent(static_cast<Entity>(i)) };
+					auto& pos{ transformComponent.GetWorldPosition() };
+					auto forward{ transformComponent.GetForward() };
+					if (pos.x >= m_Bounds.x || pos.x <= -m_Bounds.x)
+					{
+						forward.x *= -1;
+					}
+
+					if (pos.y >= m_Bounds.x || pos.y <= -m_Bounds.y)
+					{
+						forward.y *= -1;
+					}
+					transformComponent.SetForward(forward);
+					const Vector3 dir{ forward.x * 10.f, forward.y * 10.f,0.f };
+					transformComponent.Move(dir);
+				}
+			}
+			});
 	}
-		}
+}

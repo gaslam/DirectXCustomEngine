@@ -32,15 +32,8 @@ void Scene::RootRenderImGui() const
 void Scene::RootInitialize()
 {
 //	//Code to be added
-//	Initialize();
-//	Scene::Initialize();
-//
-//	FreeMoveCamera* pCamera{ new FreeMoveCamera{} };
-//	AddChild(pCamera);
-//
-//	m_pActiveCamera = pCamera->GetComponent<CameraComponent>();
-//
-//	m_pDefaultCamera = m_pActiveCamera;
+	Initialize();
+    Scene::Initialize();
 }
 
 void Scene::RootInitDeviceResources() const
@@ -61,8 +54,8 @@ void Scene::RootOnDeviceLost()
 
 void Scene::Initialize()
 {
-//	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
-//	{
-//		pChild->RootInitialize(this);
-//	}
+	for (const auto& callback: m_pInitializerCallbacks)
+	{
+		callback(this);
+	}
 }

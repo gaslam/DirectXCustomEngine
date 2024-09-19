@@ -20,6 +20,6 @@ namespace Exe
 		void Initialize() override;
 
 	private:
-		//Circle* m_pCircle{};
+		Vector3 m_Bounds{ 20,20,20 };
 	};
 }

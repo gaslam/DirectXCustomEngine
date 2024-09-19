@@ -55,6 +55,8 @@ namespace EntityEngine
 			return m_Components[entity];
 		}
 
+		[[nodiscard]] size_t GetComponentCount() const { return m_Components.size(); }
+
 		void Clear()
 		{
 			m_Entities.Clear();
