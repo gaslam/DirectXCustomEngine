@@ -65,6 +65,17 @@ public:
 	}
 
 	template
+		<typename T>
+		void GetComponent(Entity entity) {
+		auto pool{ GetComponentPool<T>() };
+
+		if (const auto poolCasted = static_cast<ComponentPool<T>*>(pool))
+		{
+			poolCasted->GetComponent(entity);
+		}
+	}
+
+	template
 <typename T>
 	void RemoveComponent()
 	{
