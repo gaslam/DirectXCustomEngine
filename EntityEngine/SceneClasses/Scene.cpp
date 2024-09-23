@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Scene.h"
+#include "Components/CameraComponentECS.h"
+#include "Components/TransformComponentECS.h"
 
 using namespace EntityEngine;
 
@@ -31,30 +33,40 @@ void Scene::RootRenderImGui() const
 
 void Scene::RootInitialize()
 {
-//	//Code to be added
+	//	//Code to be added
 	Initialize();
-    Scene::Initialize();
+
+	Entity entity = m_pRegistry->CreateEntity();
+	auto pTransform = m_pRegistry->RegisterComponent<TransformComponentECS>(entity);
+	auto pActiveCamera = m_pRegistry->RegisterComponent<CameraComponentECS>(entity);
+	AddInitializerCallback([pTransform, pActiveCamera](const Scene* pScene) {
+		pActiveCamera->Initialize(pTransform);
+		});
+	AddUpdateCallback([pActiveCamera](const Scene* pScene) {
+		pActiveCamera->Update();
+		});
+	Scene::Initialize();
 }
 
 void Scene::RootInitDeviceResources() const
 {
-//	for(const std::unique_ptr<GameObject>& pChild: m_pChildren)
-//	{
-//		pChild->RootInitDeviceResources();
-//	}
+	//	for(const std::unique_ptr<GameObject>& pChild: m_pChildren)
+	//	{
+	//		pChild->RootInitDeviceResources();
+	//	}
 }
 
 void Scene::RootOnDeviceLost()
 {
-//	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
-//	{
-//		pChild->OnDeviceLost();
-//	}
+	//	for (const std::unique_ptr<GameObject>& pChild : m_pChildren)
+	//	{
+	//		pChild->OnDeviceLost();
+	//	}
 }
 
 void Scene::Initialize()
 {
-	for (const auto& callback: m_pInitializerCallbacks)
+	for (const auto& callback : m_pInitializerCallbacks)
 	{
 		callback(this);
 	}

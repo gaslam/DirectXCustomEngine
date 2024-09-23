@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObject.h"
-#include "Components/CameraComponent.h"
 #include "ECS/Registry.h"
 
 namespace EntityEngine
 {
+	class CameraComponentECS;
 	class Scene
 	{
 	public:
@@ -41,7 +41,7 @@ namespace EntityEngine
 		void RootOnDeviceLost();
 		virtual void OnDeviceLost() {};
 		[[nodiscard]]std::wstring GetName() const { return m_Name; }
-		[[nodiscard]] const CameraComponent* GetActiveCamera() const { return m_pActiveCamera; }
+		[[nodiscard]] CameraComponentECS* GetActiveCamera() const { return m_pActiveCamera; }
 
 		void AddInitializerCallback(const std::function<void(const Scene*)>& callback) { m_pInitializerCallbacks.emplace_back(callback); }
 		void AddUpdateCallback(const std::function<void(const Scene*)>& callback) { m_pUpdateCallbacks.emplace_back(callback); }
@@ -56,8 +56,7 @@ namespace EntityEngine
 	private:
 		const std::wstring m_Name{};
 
-		CameraComponent* m_pActiveCamera{};
-		CameraComponent* m_pDefaultCamera{};
+		CameraComponentECS* m_pActiveCamera{};
 
 		std::vector<std::function<void(const Scene*)>> m_pInitializerCallbacks{};
 		std::vector<std::function<void(const Scene*)>> m_pUpdateCallbacks{};
